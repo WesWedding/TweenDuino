@@ -19,7 +19,11 @@
 #include <TweenDuino.h>
 
 TweenDuino::TweenDuino(double& t, unsigned long duration, double finalVal) 
-  : target(t), duration(duration), finalVal(finalVal), active(false), initialized(false) {
+  : target(t), duration(duration), finalVal(finalVal) {
+    initialized = false;
+    active = false;
+    time = 0;
+    ratio = 0;
   }
 
 TweenDuino::~TweenDuino() {
@@ -33,27 +37,25 @@ TweenDuino *TweenDuino::to(double& target, unsigned long duration, double to) {
 }
 
 bool TweenDuino::isActive() {
-  return initialized && time <= (startTime + duration);
+  return initialized && time < duration;
 }
 
 void TweenDuino::update(unsigned long newTime) {
+
   unsigned long prevTime = time;
 
   // Set some times before potentially updating state further (if there's any time left);
   if (time >= duration && time >= 0) {
-    totalTime = newTime;
-    time = newTime;
+    totalTime = duration;
+    time = duration;
     ratio = 1;
-  } else if (time < 0) {
-    totalTime = 0;
-    time = 0;
-    ratio = 0;
   } else {
     totalTime = newTime;
     time = newTime;
     ratio = getRatio((double)time / (double)duration);
   }
 
+  // this->time hasn't changed because we're probably done.
   if (time == prevTime) {
     return;
   }
@@ -62,12 +64,7 @@ void TweenDuino::update(unsigned long newTime) {
     init();
     
     startVal = target;
-    startTime = newTime;
-
     changeRate = (double) finalVal - startVal;
-    if (changeRate < 0.0d) {
-      changeRate = 0.0d;
-    }
   }
 
   target = changeRate * ratio + startVal;
