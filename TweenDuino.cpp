@@ -24,6 +24,8 @@ TweenDuino::TweenDuino(double& t, unsigned long duration, double finalVal)
     active = false;
     time = 0;
     ratio = 0;
+    startVal = t;
+    totalChange = finalVal - startVal;
   }
 
 TweenDuino::~TweenDuino() {
@@ -61,16 +63,13 @@ void TweenDuino::update(unsigned long newTime) {
   }
 
   if (!initialized) {
-    init();
-    
-    startVal = target;
-    changeRate = (double) finalVal - startVal;
+    begin();
   }
-
-  target = changeRate * ratio + startVal;
+  
+  target = totalChange * ratio + startVal;
 }
 
-void TweenDuino::init() {
+void TweenDuino::begin() {
   ease = new SineEase();
 
   // These are somewhat arbitrary values. 

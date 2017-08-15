@@ -39,11 +39,11 @@ private:
     double finalVal;
     double startVal;
     double ratio;
-    double changeRate;
+    double totalChange;
 
     EasingBase *ease;
 
-    void init();
+    void begin();
     double getRatio(double);
 };
 
