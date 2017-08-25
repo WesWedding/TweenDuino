@@ -24,6 +24,7 @@ public:
     static TweenDuino *to(float& target, unsigned long duration, float to);
     void update(unsigned long newTime);
     bool isActive();
+    bool isComplete();
 
 private:
     float &target;
@@ -35,6 +36,7 @@ private:
     unsigned long startTime;
     bool initialized;
     bool active;
+    bool completed;
     float finalVal;
     float startVal;
     float ratio;

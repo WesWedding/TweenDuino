@@ -26,6 +26,7 @@ TweenDuino::TweenDuino(float& t, unsigned long duration, float finalVal)
     ratio = 0;
     startVal = t;
     totalChange = finalVal - startVal;
+    completed = false;
   }
 
 TweenDuino::~TweenDuino() {
@@ -41,6 +42,10 @@ bool TweenDuino::isActive() {
   return initialized && time < duration;
 }
 
+bool TweenDuino::isComplete() {
+  return completed;
+}
+
 void TweenDuino::update(unsigned long updTime) {
 
   unsigned long prevTime = time;
@@ -50,6 +55,7 @@ void TweenDuino::update(unsigned long updTime) {
     totalTime = duration;
     time = duration;
     ratio = 1;
+    completed = true;
   } else {
     totalTime = updTime;
     time = updTime;
@@ -64,8 +70,10 @@ void TweenDuino::update(unsigned long updTime) {
   if (!initialized) {
     begin();
   }
-  
-  target = totalChange * ratio + startVal;
+
+  if (!completed) {  
+    target = totalChange * ratio + startVal;
+  }
 }
 
 void TweenDuino::begin() {
