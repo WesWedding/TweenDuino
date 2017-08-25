@@ -18,7 +18,7 @@
 
 #include <TweenDuino.h>
 
-TweenDuino::TweenDuino(double& t, unsigned long duration, double finalVal) 
+TweenDuino::TweenDuino(float& t, unsigned long duration, float finalVal) 
   : target(t), duration(duration), finalVal(finalVal) {
     initialized = false;
     active = false;
@@ -33,8 +33,7 @@ TweenDuino::~TweenDuino() {
     delete ease;
   }
 }
-
-TweenDuino *TweenDuino::to(double& target, unsigned long duration, double to) {
+TweenDuino *TweenDuino::to(float& target, unsigned long duration, float to) {
   return new TweenDuino(target, duration, to);
 }
 
@@ -42,22 +41,22 @@ bool TweenDuino::isActive() {
   return initialized && time < duration;
 }
 
-void TweenDuino::update(unsigned long newTime) {
+void TweenDuino::update(unsigned long updTime) {
 
   unsigned long prevTime = time;
 
   // Set some times before potentially updating state further (if there's any time left);
-  if (time >= duration && time >= 0) {
+  if (updTime >= duration) {
     totalTime = duration;
     time = duration;
     ratio = 1;
   } else {
-    totalTime = newTime;
-    time = newTime;
-    ratio = getRatio((double)time / (double)duration);
+    totalTime = updTime;
+    time = updTime;
+    ratio = getRatio((float)time / (float)duration);
   }
 
-  // this->time hasn't changed because we're probably done.
+  // Save ourselves some cycles if we're not moving forward.
   if (time == prevTime) {
     return;
   }
@@ -80,7 +79,7 @@ void TweenDuino::begin() {
   initialized = true;
 }
 
-double TweenDuino::getRatio(double t) {
+double TweenDuino::getRatio(float t) {
   if (!ease) {
     return 0.0d;
   }

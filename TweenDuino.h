@@ -19,15 +19,14 @@ public:
     enum Ease { EASE, LINEAR };
     enum EaseType { IN, OUT, INOUT, NONE };
     
-    TweenDuino(double &val, unsigned long duration, double to);
-    ~TweenDuino();
+    TweenDuino(float &val, unsigned long duration, float to);
 
-    static TweenDuino *to(double& target, unsigned long duration, double to);
+    static TweenDuino *to(float& target, unsigned long duration, float to);
     void update(unsigned long newTime);
     bool isActive();
 
 private:
-    double &target;
+    float &target;
 
     unsigned long duration;
     unsigned long totalDuration;
@@ -36,15 +35,15 @@ private:
     unsigned long startTime;
     bool initialized;
     bool active;
-    double finalVal;
-    double startVal;
-    double ratio;
-    double totalChange;
+    float finalVal;
+    float startVal;
+    float ratio;
+    float totalChange;
 
     EasingBase *ease;
 
     void begin();
-    double getRatio(double);
+    double getRatio(float);
 };
 
 #endif

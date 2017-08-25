@@ -2,33 +2,36 @@
 #include <TweenDuino.h>
 
 #define CONTINUOUS_DURATION 7000UL
+#define SERIAL_BAUD 115200
 
-double increasingDouble = 100.0d;
-TweenDuino increasing(increasingDouble, CONTINUOUS_DURATION, 100.0d);
-
-double decreasingDouble = 100.0d;
-TweenDuino decreasing(decreasingDouble, CONTINUOUS_DURATION, 0.0d);
+float increasingFloat = 0.0;
+TweenDuino increasing(increasingFloat, CONTINUOUS_DURATION, 100.0);
 
 testing(increasingTween) 
 {
   unsigned long t = millis();
   increasing.update(t);
-  assertLessOrEqual(increasingDouble, 100.0d);
-  assertMoreOrEqual(increasingDouble, 0.0d);
+  assertLessOrEqual(increasingFloat, 100.0);
+  assertMoreOrEqual(increasingFloat, 0.0);
 
   if (t >= CONTINUOUS_DURATION) {
+    assertEqual(increasingFloat, 100.0);
     pass();
   }
 }
+
+float decreasingFloat = 100.0;
+TweenDuino decreasing(decreasingFloat, CONTINUOUS_DURATION, 0.0);
 
 testing(decreasingTween)
 {
   unsigned long t = millis();
   decreasing.update(t);
-  assertLessOrEqual(decreasingDouble, 100.0d);
-  assertMoreOrEqual(decreasingDouble, 0.0d);
+  assertLessOrEqual(decreasingFloat, 100.0);
+  assertMoreOrEqual(decreasingFloat, 0.0);
 
   if (t >= CONTINUOUS_DURATION) {
+    assertEqual(decreasingFloat, 0.0);
     pass();
   }
 }
@@ -39,7 +42,7 @@ testing(decreasingTween)
  * A tween trying to tween from 0.0d to 0.0d would crash.
  */
 test(finalAndInitialAreZero) {
-  double val = 0.0d;
+  float val = 0.0;
   TweenDuino tween(val, 56734UL, 0.0d);
   tween.update(0UL);
   tween.update(1000UL);
@@ -53,17 +56,17 @@ test(finalAndInitialAreZero) {
  * A tween trying to tween from 0.0d to 0.0d would crash.
  */
 test(valsetToZeroDuringTweenToZero) {
-  double val = 100.0d;
+  float val = 100.0;
   TweenDuino tween(val, 56734UL, 0.0d);
   tween.update(0UL);
   tween.update(1000UL);
-  val = 0.0d;
+  val = 0.0;
   tween.update(56734UL);
   assertEqual(val, 0.0d);
 }
 
 test(finalAndInitialAreSame) {
-  double val = 4640.0d;
+  float val = 4640.0;
   TweenDuino tween(val, 56734UL, 4640.0d);
   tween.update(0UL);
   tween.update(1000UL);
@@ -72,12 +75,14 @@ test(finalAndInitialAreSame) {
 }
 
 void setup() {
-  Serial.begin(9600);
-  while(!Serial); // for the Arduino Leonardo/Micro only
+  Serial.begin(SERIAL_BAUD);
+  //while(!Serial); // for the Arduino Leonardo/Micro only
 
   // Currently causes a crash.
   Test::exclude("finalAndInitialAreZero");
   Test::exclude("valsetToZeroDuringTweenToZero");
+
+  Test::exclude("decreasingTween");
 }
 
 void loop() {
