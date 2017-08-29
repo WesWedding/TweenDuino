@@ -27,6 +27,7 @@ TweenDuino::Tween::Tween(float& t, unsigned long duration, float finalVal)
     startVal = t;
     totalChange = finalVal - startVal;
     completed = false;
+    ease = nullptr;
   }
 
 TweenDuino::Tween::~Tween() {
@@ -92,7 +93,7 @@ void TweenDuino::Tween::begin() {
 }
 
 double TweenDuino::Tween::getRatio(float t) {
-  if (!ease) {
+  if (ease == nullptr) {
     return 0.0d;
   }
   return ease->easeOut(t);
