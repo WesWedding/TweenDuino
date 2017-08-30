@@ -24,12 +24,19 @@ bool TweenDuino::Timeline::add(TweenDuino::Tween &tween) {
     // If you change this line here, you might need to change it there.
     for (; tweens[entryIndex].tween != nullptr && entryIndex < TIMELINE_SIZE; entryIndex++) {
         unsigned long duration = tweens[entryIndex].tween->getDuration();
-        nextStartTime = duration;
+        
+        Serial.print("duration for tween: "); Serial.println(duration); 
+        nextStartTime += duration;
+        
     }
+    
+    Serial.print("startTime after checks: "); Serial.println(nextStartTime);       
 
     if (entryIndex >= TIMELINE_SIZE) {
         return false;
     }
+    
+    Serial.print("adding tween at: "); Serial.println(entryIndex);
 
     // i is pointing at an "empty" TimelineEntry at this point.  This tween's new home!
     TweenDuino::Timeline::TimelineEntry &entry = tweens[entryIndex];
@@ -55,22 +62,26 @@ void TweenDuino::Timeline::update(unsigned long newTime) {
     if (totalTime == prevTime) {
         return;
     }
-
-    Serial.println("going to update");
     
     unsigned long curTime = totalTime;
 
     // Maintenance Note: Very similar looping logic in TweenDuino::Timeline::add
     // If you change this line here, you might need to change it there.
     for (int i = 0; tweens[i].tween != nullptr && i < TIMELINE_SIZE; i++) {
-        Serial.print("updating tween at "); Serial.println(i);
+        //Serial.print("updating tween at "); Serial.println(i);
         TimelineEntry entry = tweens[i];
         
+        Serial.print("startTime set: "); Serial.println(entry.startTime);
         if (curTime >= entry.startTime) {
             Tween *tween = entry.tween;
             if (!tween->isComplete()) {
+              Serial.print("progressing Tween: "); Serial.println(i);
               tween->update(totalTime - entry.startTime);
+            } else {
+              Serial.print("skipped completed Tween: "); Serial.println(i);
             }
+        } else {
+          Serial.print("Tween no ready: "); Serial.println(i);
         }
     }
 }

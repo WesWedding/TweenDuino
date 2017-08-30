@@ -76,13 +76,19 @@ void TweenDuino::Tween::update(unsigned long updTime) {
     begin();
   }
 
-  if (!completed) {  
+  if (!completed) {
     target = totalChange * ratio + startVal;
   }
 }
 
 void TweenDuino::Tween::begin() {
-  ease = new SineEase();
+  ease = new LinearEase();
+  
+  Serial.println("Beginning");
+  
+  // The target's current state might have changed by now.
+  startVal = target;
+  totalChange = finalVal - startVal;  
 
   // These are somewhat arbitrary values. 
   // The actual tween result will be derived from actual time passage and what value we're tweening to/from.
