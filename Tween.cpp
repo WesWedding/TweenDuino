@@ -67,7 +67,8 @@ void TweenDuino::Tween::update(unsigned long updTime) {
     ratio = getRatio((float)time / (float)duration);
   }
 
-  // Save ourselves some cycles if haven't moved ahead in time.
+  // Save ourselves some cycles if haven't moved ahead in time,
+  // or if we're done rendering.
   if (time == prevTime) {
     return;
   }
@@ -76,9 +77,7 @@ void TweenDuino::Tween::update(unsigned long updTime) {
     begin();
   }
 
-  if (!completed) {
-    target = totalChange * ratio + startVal;
-  }
+  target = totalChange * ratio + startVal;
 }
 
 void TweenDuino::Tween::begin() {

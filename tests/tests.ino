@@ -5,7 +5,7 @@
 #define SERIAL_BAUD 115200
 
 float increasingFloat = 0.0;
-TweenDuino increasing(increasingFloat, CONTINUOUS_DURATION, 100.0);
+TweenDuino::Tween increasing(increasingFloat, CONTINUOUS_DURATION, 100.0);
 
 testing(increasingTween) 
 {
@@ -21,7 +21,7 @@ testing(increasingTween)
 }
 
 float decreasingFloat = 100.0;
-TweenDuino decreasing(decreasingFloat, CONTINUOUS_DURATION, 0.0);
+TweenDuino::Tween decreasing(decreasingFloat, CONTINUOUS_DURATION, 0.0);
 
 testing(decreasingTween)
 {
@@ -43,7 +43,7 @@ testing(decreasingTween)
  */
 test(finalAndInitialAreZero) {
   float val = 0.0;
-  TweenDuino tween(val, 56734UL, 0.0d);
+  TweenDuino::Tween tween(val, 56734UL, 0.0d);
   tween.update(0UL);
   tween.update(1000UL);
   tween.update(56734UL);
@@ -57,7 +57,7 @@ test(finalAndInitialAreZero) {
  */
 test(valsetToZeroDuringTweenToZero) {
   float val = 100.0;
-  TweenDuino tween(val, 56734UL, 0.0d);
+  TweenDuino::Tween tween(val, 56734UL, 0.0d);
   tween.update(0UL);
   tween.update(1000UL);
   val = 0.0;
@@ -67,7 +67,7 @@ test(valsetToZeroDuringTweenToZero) {
 
 test(finalAndInitialAreSame) {
   float val = 4640.0;
-  TweenDuino tween(val, 56734UL, 4640.0d);
+  TweenDuino::Tween tween(val, 56734UL, 4640.0d);
   tween.update(0UL);
   tween.update(1000UL);
   tween.update(56734UL);
@@ -78,11 +78,6 @@ void setup() {
   Serial.begin(SERIAL_BAUD);
   //while(!Serial); // for the Arduino Leonardo/Micro only
 
-  // Currently causes a crash.
-  Test::exclude("finalAndInitialAreZero");
-  Test::exclude("valsetToZeroDuringTweenToZero");
-
-  Test::exclude("decreasingTween");
 }
 
 void loop() {
