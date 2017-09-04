@@ -22,22 +22,15 @@ bool TweenDuino::Timeline::add(TweenDuino::Tween &tween) {
     int entryIndex = 0;
     // Maintence Note: Very similar looping logic in TweenDuino::Timeline::update.
     // If you change this line here, you might need to change it there.
-    for (; tweens[entryIndex].tween != nullptr && entryIndex < TIMELINE_SIZE; entryIndex++) {
+    for (; tweens[entryIndex].tween != nullptr && entryIndex < TWEEN_TIMELINE_SIZE; entryIndex++) {
         unsigned long duration = tweens[entryIndex].tween->getDuration();
-        
-        Serial.print("duration for tween: "); Serial.println(duration); 
         nextStartTime += duration;
-        
     }
-    
-    Serial.print("startTime after checks: "); Serial.println(nextStartTime);       
 
-    if (entryIndex >= TIMELINE_SIZE) {
+    if (entryIndex >= TWEEN_TIMELINE_SIZE) {
         return false;
     }
     
-    Serial.print("adding tween at: "); Serial.println(entryIndex);
-
     // i is pointing at an "empty" TimelineEntry at this point.  This tween's new home!
     TweenDuino::Timeline::TimelineEntry &entry = tweens[entryIndex];
     entry.tween = &tween;
@@ -67,21 +60,20 @@ void TweenDuino::Timeline::update(unsigned long newTime) {
 
     // Maintenance Note: Very similar looping logic in TweenDuino::Timeline::add
     // If you change this line here, you might need to change it there.
-    for (int i = 0; tweens[i].tween != nullptr && i < TIMELINE_SIZE; i++) {
+    for (int i = 0; tweens[i].tween != nullptr && i < TWEEN_TIMELINE_SIZE; i++) {
         //Serial.print("updating tween at "); Serial.println(i);
         TimelineEntry entry = tweens[i];
         
-        Serial.print("startTime set: "); Serial.println(entry.startTime);
+
+        // TODO: Remove pointless elses.  Left in for future debug for now.
         if (curTime >= entry.startTime) {
             Tween *tween = entry.tween;
             if (!tween->isComplete()) {
-              Serial.print("progressing Tween: "); Serial.println(i);
               tween->update(totalTime - entry.startTime);
             } else {
-              Serial.print("skipped completed Tween: "); Serial.println(i);
             }
         } else {
-          Serial.print("Tween no ready: "); Serial.println(i);
+
         }
     }
 }

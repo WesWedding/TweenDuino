@@ -3,8 +3,8 @@
 #define TWEEN_DUINO_TIMELINE_H
 
 
-#ifndef TIMELINE_SIZE
-  #define TIMELINE_SIZE 10
+#ifndef TWEEN_TIMELINE_SIZE
+  #define TWEEN_TIMELINE_SIZE 90
 #endif
 
 #include <Tween.h>
@@ -29,7 +29,7 @@ private:
         unsigned long startTime;
     };
 
-    TweenDuino::Timeline::TimelineEntry tweens[TIMELINE_SIZE];
+    TweenDuino::Timeline::TimelineEntry tweens[TWEEN_TIMELINE_SIZE];
 
     unsigned long totalDuration;
     unsigned long totalTime;
