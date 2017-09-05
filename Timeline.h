@@ -18,6 +18,7 @@ public:
     void update(unsigned long time);
 
     bool add(TweenDuino::Tween &tween);
+    int maxChildren();
     bool isComplete();
 
 

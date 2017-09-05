@@ -74,10 +74,86 @@ test(finalAndInitialAreSame) {
   assertEqual(val, 4640.0d);
 }
 
+test(emptyTimelineCompletes) {
+  TweenDuino::Timeline tl;
+  tl.update(0UL);
+  assertTrue(tl.isComplete());
+}
+
+/**
+ * See: https://github.com/stickywes/TweenDuino/issues/3
+ * 
+ * A tween trying to tween from 0.0d to 0.0d would crash.
+ */
+test(timelineCompletesOnFinalMS) {
+  TweenDuino::Timeline tl;
+
+  float val = 0.0;
+  const float stop1 = 100.0;
+  const unsigned long dur1 = 400UL;
+  TweenDuino::Tween tween1(val, dur1, stop1);
+
+  const float stop2 = 200.0;
+  const unsigned long dur2 = 300UL;
+  TweenDuino::Tween tween2(val, dur2, stop2);
+
+  const float stop3 = 130.0;
+  const unsigned long dur3 = 100UL;
+  TweenDuino::Tween tween3(val, dur3, stop3);
+
+  tl.add(tween1);
+  tl.add(tween2);
+  tl.add(tween3);
+
+  tl.update(0UL);
+  assertEqual(val, 0.0);
+  assertFalse(tl.isComplete());
+  assertFalse(tween1.isComplete());
+
+  tl.update(dur1);
+  assertEqual(val, stop1);
+  assertFalse(tl.isComplete());
+  assertTrue(tween1.isComplete());
+
+  tl.update(dur1 + dur2);
+  assertEqual(val, stop2);
+  assertFalse(tl.isComplete());
+  assertTrue(tween2.isComplete());
+
+  tl.update(dur1 + dur2 + dur3);
+  assertEqual(val, stop3);
+  assertTrue(tl.isComplete());
+  assertTrue(tween3.isComplete());
+
+  // One last check... just for the heck of it.
+  tl.update(dur1 + dur2 + dur3 + 1000UL);
+  assertEqual(val, stop3);
+  assertTrue(tl.isComplete());
+}
+
+/**
+ * See: https://github.com/stickywes/TweenDuino/issues/8
+ * 
+ * Strange behavior would appear when adding too many tweens.
+ */
+test(rejectTooManyTweens) {
+  TweenDuino::Timeline tl;
+  const int maxTweens = tl.maxChildren();
+  float val = 123.0;
+  bool added = false;
+  for (int i = 0; i < maxTweens; i++) {
+    added = tl.add(*TweenDuino::Tween::to(val, 100UL, 123.0));
+    assertTrue(added);
+  }
+
+  added = tl.add(*TweenDuino::Tween::to(val, 100UL, 123.0));
+  assertFalse(added);
+}
+
 void setup() {
   Serial.begin(SERIAL_BAUD);
-  //while(!Serial); // for the Arduino Leonardo/Micro only
-
+  // Convenient for waiting until serial monitor connects.
+  while(!Serial);
 }
 
 void loop() {

@@ -12,6 +12,10 @@ TweenDuino::Timeline::TimelineEntry::TimelineEntry(): tween(nullptr), startTime(
 
 TweenDuino::Timeline::Timeline(): totalDuration(0), totalTime(0), completed(false) {}
 
+int TweenDuino::Timeline::maxChildren() {
+    return TWEEN_TIMELINE_SIZE;
+}
+
 bool TweenDuino::Timeline::isComplete() {
     return completed;
 }
@@ -27,12 +31,11 @@ bool TweenDuino::Timeline::add(TweenDuino::Tween &tween) {
         nextStartTime += duration;
     }
 
-    if (entryIndex >= TWEEN_TIMELINE_SIZE) {
+    TweenDuino::Timeline::TimelineEntry &entry = tweens[entryIndex];
+    if (entry.tween != nullptr) {
         return false;
     }
-    
     // i is pointing at an "empty" TimelineEntry at this point.  This tween's new home!
-    TweenDuino::Timeline::TimelineEntry &entry = tweens[entryIndex];
     entry.tween = &tween;
     
     entry.startTime = nextStartTime;
