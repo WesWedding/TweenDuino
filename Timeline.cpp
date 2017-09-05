@@ -22,7 +22,7 @@ bool TweenDuino::Timeline::add(TweenDuino::Tween &tween) {
     int entryIndex = 0;
     // Maintence Note: Very similar looping logic in TweenDuino::Timeline::update.
     // If you change this line here, you might need to change it there.
-    for (; tweens[entryIndex].tween != nullptr && entryIndex < TWEEN_TIMELINE_SIZE; entryIndex++) {
+    for (; entryIndex < TWEEN_TIMELINE_SIZE && tweens[entryIndex].tween != nullptr; entryIndex++) {
         unsigned long duration = tweens[entryIndex].tween->getDuration();
         nextStartTime += duration;
     }
@@ -60,10 +60,8 @@ void TweenDuino::Timeline::update(unsigned long newTime) {
 
     // Maintenance Note: Very similar looping logic in TweenDuino::Timeline::add
     // If you change this line here, you might need to change it there.
-    for (int i = 0; tweens[i].tween != nullptr && i < TWEEN_TIMELINE_SIZE; i++) {
-        //Serial.print("updating tween at "); Serial.println(i);
+    for (int i = 0; i < TWEEN_TIMELINE_SIZE && tweens[i].tween != nullptr; i++) {
         TimelineEntry entry = tweens[i];
-        
 
         // TODO: Remove pointless elses.  Left in for future debug for now.
         if (curTime >= entry.startTime) {
