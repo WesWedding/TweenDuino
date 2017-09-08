@@ -36,42 +36,82 @@ testing(decreasingTween)
   }
 }
 
-/**
- * See: https://github.com/stickywes/TweenDuino/issues/3
- * 
- * A tween trying to tween from 0.0d to 0.0d would crash.
- */
-test(finalAndInitialAreZero) {
+test(tweenCompleteAtDurationReached) {
   float val = 0.0;
-  TweenDuino::Tween tween(val, 56734UL, 0.0d);
-  tween.update(0UL);
-  tween.update(1000UL);
+  TweenDuino::Tween tween(val, 56734UL, 0.0);
   tween.update(56734UL);
-  assertEqual(val, 0.0d);
+  assertTrue(tween.isComplete());
+  tween.update(56850UL);
+  assertTrue(tween.isComplete());
 }
 
 /**
  * See: https://github.com/stickywes/TweenDuino/issues/3
  * 
- * A tween trying to tween from 0.0d to 0.0d would crash.
+ * A tween trying to tween from 0.0 to 0.0 would crash.
+ */
+test(finalAndInitialAreZero) {
+  float val = 0.0;
+  TweenDuino::Tween tween(val, 56734UL, 0.0);
+  tween.update(0UL);
+  tween.update(1000UL);
+  tween.update(56734UL);
+  assertEqual(val, 0.0);
+  tween.update(56735UL);
+  assertEqual(val, 0.0);
+}
+
+/**
+ * See: https://github.com/stickywes/TweenDuino/issues/3
+ * 
+ * A tween trying to tween from 0.0 to 0.0 would crash.
  */
 test(valsetToZeroDuringTweenToZero) {
   float val = 100.0;
-  TweenDuino::Tween tween(val, 56734UL, 0.0d);
+  TweenDuino::Tween tween(val, 56734UL, 0.0);
   tween.update(0UL);
-  tween.update(1000UL);
+  assertNotEqual(val, 0.0);
   val = 0.0;
+  tween.update(1000UL);
+  assertNotEqual(val, 0.0);
   tween.update(56734UL);
-  assertEqual(val, 0.0d);
+  assertEqual(val, 0.0);
+  tween.update(56735UL);
+  assertEqual(val, 0.0);
 }
 
 test(finalAndInitialAreSame) {
   float val = 4640.0;
-  TweenDuino::Tween tween(val, 56734UL, 4640.0d);
+  TweenDuino::Tween tween(val, 56734UL, 4640.0);
   tween.update(0UL);
+  assertEqual(val, 4640.0);
   tween.update(1000UL);
+  assertEqual(val, 4640.0);
   tween.update(56734UL);
-  assertEqual(val, 4640.0d);
+  assertEqual(val, 4640.0);
+  tween.update(56735UL);
+  assertEqual(val, 4640.0);
+}
+
+test(tweenHitsMaxEvenIfFinalMilliSkipped) {
+  float val = 10.0;
+  TweenDuino::Tween tween(val, 8732UL, 9820.34);
+  tween.update(0UL);
+  tween.update(1999UL);
+  tween.update(8600UL);
+  // Skip 8732UL.  Perhaps, for instance, a sketch had a delay() in it.
+  tween.update(8790UL);
+  assertEqual(val, 9820.34);
+  assertTrue(tween.isComplete());
+}
+
+test(tweenWontExceedFinalValueAtEdges) {
+  float val = 10.0;
+  TweenDuino::Tween tween(val, 8732UL, 9820.34);
+  tween.update(0UL);
+  tween.update(1999UL);
+  tween.update(8731UL);
+  assertEqual(val, 9820.34);
 }
 
 test(emptyTimelineCompletes) {
@@ -152,7 +192,20 @@ test(rejectTooManyTweens) {
 
 void setup() {
   Serial.begin(SERIAL_BAUD);
-  // Convenient for waiting until serial monitor connects.
+  // Test::exclude("name") go here!
+
+  //Test::exclude("increasingTween");
+  //Test::exclude("decreasingTween");
+  //Test::exclude("finalAndInitialAreSame");
+  //Test::exclude("finalAndInitialAreZero");
+  //Test::exclude("valsetToZeroDuringTweenToZero");
+  //Test::exclude("tweenHitsMaxEvenIfFinalMilliSkipped");
+  //Test::exclude("emptyTimelineCompletes");
+  //Test::exclude("timelineCompletesOnFinalMS");
+  //Test::exclude("tweenWontExceedFinalValueAtEdges");
+  //Test::exclude("rejectTooManyTweens");
+  //Test::exclude("tweenCompleteAtDurationReached");
+  // Convenient to wait for serial monitor, so you don't miss results.
   while(!Serial);
 }
 
