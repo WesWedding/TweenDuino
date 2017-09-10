@@ -22,13 +22,16 @@ public:
     enum EaseType { IN, OUT, INOUT, NONE };
     
     Tween(float &val, unsigned long duration, float to);
-    ~Tween();
 
     static Tween *to(float& target, unsigned long duration, float to);
+    void begin(unsigned long startTime);
     void update(unsigned long newTime);
+    void restartFrom(unsigned long newStart);
+    
     bool isActive();
     bool isComplete();
     unsigned long getDuration();
+    unsigned long getStartTime();
 
 private:
     float &target;
@@ -47,8 +50,6 @@ private:
     float totalChange;
 
     EasingBase *ease;
-
-    void begin();
     double getRatio(float);
 };
 

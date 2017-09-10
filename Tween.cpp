@@ -28,13 +28,9 @@ TweenDuino::Tween::Tween(float& t, unsigned long duration, float finalVal)
     totalChange = finalVal - startVal;
     completed = false;
     ease = nullptr;
+    startTime = 0;
   }
 
-TweenDuino::Tween::~Tween() {
-  if (ease) {
-    delete ease;
-  }
-}
 TweenDuino::Tween *TweenDuino::Tween::to(float& target, unsigned long duration, float to) {
   return new Tween(target, duration, to);
 }
@@ -51,43 +47,22 @@ unsigned long TweenDuino::Tween::getDuration() {
   return duration;
 }
 
-void TweenDuino::Tween::update(unsigned long updTime) {
-
-  unsigned long prevTime = time;
-
-  // Set some times before potentially updating state further (if there's any time left);
-  if (updTime >= duration) {
-    totalTime = duration;
-    time = duration;
-    ratio = 1;
-    completed = true;
-  } else {
-    totalTime = updTime;
-    time = updTime;
-    ratio = getRatio((float)time / (float)duration);
-  }
-
-  // Save ourselves some cycles if haven't moved ahead in time,
-  // or if we're done rendering.
-  if (time == prevTime) {
-    return;
-  }
-
-  if (!initialized) {
-    begin();
-  }
-
-  target = totalChange * ratio + startVal;
+unsigned long TweenDuino::Tween::getStartTime() {
+  return startTime;
 }
 
-void TweenDuino::Tween::begin() {
-  ease = new LinearEase();
-  
-  Serial.println("Beginning");
-  
+void TweenDuino::Tween::begin(unsigned long timeMs) {
+  if (ease == nullptr) {
+    ease = new LinearEase();
+  }
+  startTime = timeMs;
+  time = timeMs;
+
+  //Serial.print("setting tween start to: ");  Serial.println(timeMs);
+
   // The target's current state might have changed by now.
   startVal = target;
-  totalChange = finalVal - startVal;  
+  totalChange = finalVal - startVal;
 
   // These are somewhat arbitrary values. 
   // The actual tween result will be derived from actual time passage and what value we're tweening to/from.
@@ -95,6 +70,55 @@ void TweenDuino::Tween::begin() {
   ease->setTotalChangeInPosition(1);
 
   initialized = true;
+}
+
+/**
+ * Update the tween.  If the tween has not been initialized with begin(), the first update
+ * also becomes the startTime of the tween.
+ */
+void TweenDuino::Tween::update(unsigned long updTime) {
+
+  if (!initialized) {
+    begin(updTime);
+}
+
+  unsigned long prevTime = time;
+
+  // Set some times before potentially updating state further (if there's any time left);
+
+  //  Serial.print("duration: ");  Serial.println(duration);
+  //  Serial.print("startTime: ");  Serial.println(startTime);
+  //  Serial.print("updTime: ");  Serial.println(updTime);
+  if (updTime >= duration + startTime) {
+    totalTime = duration;
+    time = duration;
+    ratio = 1.0;
+    completed = true;
+  } else if (updTime < startTime) {
+    totalTime = 0;
+    time = 0;
+    ratio = 0.0;
+  } else {
+    totalTime = updTime;
+    time = updTime;
+    ratio = getRatio((float)(time - startTime) / (float)duration);
+  }
+
+  // Save ourselves some cycles if haven't moved ahead in time,
+  // or if we're done rendering.
+  // Initialized check is important in case the first update() happens at updTime == 0.
+  if (time == prevTime) {
+    return;
+  }
+
+  target = totalChange * ratio + startVal;
+}
+
+void TweenDuino::Tween::restartFrom(unsigned long newStart) {
+  completed = false;
+  initialized = false;
+  time = 0;
+  startTime = newStart;
 }
 
 double TweenDuino::Tween::getRatio(float t) {
