@@ -18,12 +18,14 @@ namespace TweenDuino {
 
 class Tween {
 public:
-    enum Ease { EASE, LINEAR };
+    enum Ease { LINEAR, SINE, QUAD, CUBIC, QUART, QUINT };
     enum EaseType { IN, OUT, INOUT, NONE };
     
     Tween(float &val, unsigned long duration, float to);
 
     static Tween *to(float& target, unsigned long duration, float to);
+    static Tween *to(float& target, unsigned long duration, float to, Ease ease, EaseType type);
+    void setTween(Ease e, EaseType t);
     void begin(unsigned long startTime);
     void update(unsigned long newTime);
     void restartFrom(unsigned long newStart);
@@ -49,6 +51,7 @@ private:
     float ratio;
     float totalChange;
 
+    EaseType easeType;
     EasingBase *ease;
     double getRatio(float);
 };

@@ -32,7 +32,16 @@ TweenDuino::Tween::Tween(float& t, unsigned long duration, float finalVal)
   }
 
 TweenDuino::Tween *TweenDuino::Tween::to(float& target, unsigned long duration, float to) {
-  return new Tween(target, duration, to);
+  Tween *tween = new Tween(target, duration, to);
+  tween->setTween(LINEAR, INOUT); 
+  return tween;
+}
+
+TweenDuino::Tween *TweenDuino::Tween::to(float& target, unsigned long duration, float to, Ease ease, EaseType type) {
+  Tween *tween = new Tween(target, duration, to);
+  tween->setTween(ease, type);
+
+  return tween;
 }
 
 bool TweenDuino::Tween::isActive() {
@@ -51,9 +60,34 @@ unsigned long TweenDuino::Tween::getStartTime() {
   return startTime;
 }
 
+void TweenDuino::Tween::setTween(Ease e, EaseType type) {
+  switch(e) { 
+    case LINEAR:
+      ease = new LinearEase();
+      break;
+    case SINE:
+      ease = new SineEase();
+      break;
+    case QUAD:
+      ease = new QuadraticEase();
+      break;
+    case QUART:
+      ease = new QuarticEase();
+      break;
+    case QUINT:
+      ease = new QuinticEase();
+      break;
+    case CUBIC:
+      ease = new CubicEase();
+      break;
+  }
+
+  easeType = type;
+}
+
 void TweenDuino::Tween::begin(unsigned long timeMs) {
   if (ease == nullptr) {
-    ease = new LinearEase();
+    setTween(Ease::LINEAR, EaseType::INOUT);
   }
   startTime = timeMs;
   time = timeMs;
@@ -125,5 +159,14 @@ double TweenDuino::Tween::getRatio(float t) {
   if (ease == nullptr) {
     return 0.0d;
   }
-  return ease->easeOut(t);
+
+  if (easeType == IN) {
+    return ease->easeIn(t);
+  } else if (easeType == OUT) {
+    return ease->easeOut(t);
+  } else if (easeType == INOUT) {
+    return ease->easeInOut(t);
+  }
+
+  return 0.0d;
 }
