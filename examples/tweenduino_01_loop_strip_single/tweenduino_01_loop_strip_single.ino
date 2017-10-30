@@ -5,8 +5,6 @@
 #include <TweenDuino.h>
 #include <Adafruit_NeoPixel.h>
 
-#include "config.h"
-
 #define NUM_LEDS 7
 #define LEDS_PIN 9
 
