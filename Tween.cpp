@@ -114,15 +114,15 @@ void TweenDuino::Tween::update(unsigned long updTime) {
 
   if (!initialized) {
     begin(updTime);
-}
+  }
 
   unsigned long prevTime = time;
 
   // Set some times before potentially updating state further (if there's any time left);
 
-  //  Serial.print("duration: ");  Serial.println(duration);
-  //  Serial.print("startTime: ");  Serial.println(startTime);
-  //  Serial.print("updTime: ");  Serial.println(updTime);
+    Serial.print("duration: ");  Serial.println(duration);
+    Serial.print("startTime: ");  Serial.println(startTime);
+    Serial.print("updTime: ");  Serial.println(updTime);
   if (updTime >= duration + startTime) {
     totalTime = duration;
     time = duration;
