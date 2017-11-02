@@ -44,6 +44,7 @@ private:
     unsigned long totalTime;
     unsigned long startTime;
     bool initialized;
+    bool firstUpdate;
     bool active;
     bool completed;
     float finalVal;

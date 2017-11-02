@@ -5,9 +5,9 @@
 
 // Too many tests to fit into a single test; adjust which batch is commented
 // out.
-//#include "Tweens.h"
+#include "Tweens.h"
 #include "issues.h"
-#include "Timelines.h"
+//#include "Timelines.h"
 
 void setup()
 {

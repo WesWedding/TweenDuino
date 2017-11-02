@@ -51,14 +51,13 @@ bool TweenDuino::Timeline::add(TweenDuino::Tween &tween) {
 }
 
 void TweenDuino::Timeline::begin(unsigned long timeMs) {
-    Serial.print("Timeline set to start:");  Serial.println(timeMs);
     startTime = timeMs;
     totalTime = timeMs;
     initialized = true;
 }
 
 void TweenDuino::Timeline::update(unsigned long newTime) {
-
+    
     if (!initialized) {
         begin(newTime);
     }

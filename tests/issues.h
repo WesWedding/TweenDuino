@@ -48,6 +48,12 @@ test(valStartsAtExpectedVal) {
 }
 
 /** 
+ * Make sure that tweens in a timeline are cooperating with eachother,
+ * and picking up where other tweens left off correctly.
+ * 
+ * Tweens were remembering the target value at initialization, and not what the
+ * value was when they started running.
+ * 
  * @see: https://github.com/stickywes/TweenDuino/issues/12
  * */
 test(valueStartsAtValExpectedInTimeline) {

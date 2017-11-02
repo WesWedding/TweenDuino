@@ -22,6 +22,7 @@ TweenDuino::Tween::Tween(float& t, unsigned long duration, float finalVal)
   : target(t), duration(duration), finalVal(finalVal) {
     initialized = false;
     active = false;
+    firstUpdate = true;
     time = 0;
     ratio = 0;
     startVal = t;
@@ -92,13 +93,7 @@ void TweenDuino::Tween::begin(unsigned long timeMs) {
   startTime = timeMs;
   time = timeMs;
 
-  //Serial.print("setting tween start to: ");  Serial.println(timeMs);
-
-  // The target's current state might have changed by now.
-  startVal = target;
-  totalChange = finalVal - startVal;
-
-  // These are somewhat arbitrary values. 
+  // These are somewhat arbitrary values to just get the ease values working.
   // The actual tween result will be derived from actual time passage and what value we're tweening to/from.
   ease->setDuration(1);
   ease->setTotalChangeInPosition(1);
@@ -116,13 +111,16 @@ void TweenDuino::Tween::update(unsigned long updTime) {
     begin(updTime);
   }
 
+  // We set startVal here instead of begin() because we want to be able to cooperate with
+  // other code that might have adjusted the "target" value before we started to touch it.
+  if (firstUpdate) {
+    startVal = target;
+    totalChange = finalVal - startVal;
+  }
+
   unsigned long prevTime = time;
 
   // Set some times before potentially updating state further (if there's any time left);
-
-    Serial.print("duration: ");  Serial.println(duration);
-    Serial.print("startTime: ");  Serial.println(startTime);
-    Serial.print("updTime: ");  Serial.println(updTime);
   if (updTime >= duration + startTime) {
     totalTime = duration;
     time = duration;
@@ -138,9 +136,10 @@ void TweenDuino::Tween::update(unsigned long updTime) {
     ratio = getRatio((float)(time - startTime) / (float)duration);
   }
 
+  firstUpdate = false;
+
   // Save ourselves some cycles if haven't moved ahead in time,
   // or if we're done rendering.
-  // Initialized check is important in case the first update() happens at updTime == 0.
   if (time == prevTime) {
     return;
   }
@@ -151,6 +150,7 @@ void TweenDuino::Tween::update(unsigned long updTime) {
 void TweenDuino::Tween::restartFrom(unsigned long newStart) {
   completed = false;
   initialized = false;
+  firstUpdate = true;
   time = 0;
   startTime = newStart;
 }
