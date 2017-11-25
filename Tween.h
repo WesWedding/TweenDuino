@@ -43,8 +43,9 @@ private:
     unsigned long time;
     unsigned long totalTime;
     unsigned long startTime;
+    unsigned long lastUpdateTime;
     bool initialized;
-    bool firstUpdate;
+    bool onFirstUpdate;
     bool active;
     bool completed;
     float finalVal;

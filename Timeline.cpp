@@ -10,10 +10,20 @@
 
 TweenDuino::Timeline::TimelineEntry::TimelineEntry(): tween(nullptr) {}
 
-TweenDuino::Timeline::Timeline(): totalDuration(0), totalTime(0), startTime(0), completed(false), initialized(false) {}
+TweenDuino::Timeline::Timeline(): 
+    totalDuration(0), 
+    totalTime(0), 
+    startTime(0), 
+    completed(false), 
+    initialized(false),
+    lastUpdateTime(0) {}
 
 int TweenDuino::Timeline::maxChildren() {
     return TWEEN_TIMELINE_SIZE;
+}
+
+bool TweenDuino::Timeline::isActive() {
+    return initialized && lastUpdateTime >= startTime && !completed;
 }
 
 bool TweenDuino::Timeline::isComplete() {
@@ -71,6 +81,8 @@ void TweenDuino::Timeline::update(unsigned long newTime) {
         totalTime = newTime;
     }
 
+    lastUpdateTime = newTime;
+
     // Save ourselves some cycles if we haven't moved ahead in time.
     if (totalTime == prevTime) {
         return;
@@ -108,8 +120,8 @@ unsigned long TweenDuino::Timeline::getDuration() {
 void TweenDuino::Timeline::restartFrom(unsigned long newTime) {
 
     completed = false;
-    initialized = false;
     startTime = newTime;
+    lastUpdateTime = newTime;
     totalTime = 0;
 
     unsigned long entryStart = 0;

@@ -16,8 +16,10 @@ public:
     Timeline();
 
     void begin(unsigned long startTime);
+    bool isActive();
     void update(unsigned long time);
 
+    TweenDuino::Tween* addTo(float& target, unsigned long duration, float to);
     bool add(TweenDuino::Tween &tween);
     void restartFrom(unsigned long newStart);
     int maxChildren();
@@ -37,6 +39,7 @@ private:
     unsigned long totalDuration;
     unsigned long totalTime;
     unsigned long startTime;
+    unsigned long lastUpdateTime;
     bool completed;
     bool initialized;
 };

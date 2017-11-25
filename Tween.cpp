@@ -22,7 +22,7 @@ TweenDuino::Tween::Tween(float& t, unsigned long duration, float finalVal)
   : target(t), duration(duration), finalVal(finalVal) {
     initialized = false;
     active = false;
-    firstUpdate = true;
+    onFirstUpdate = true;
     time = 0;
     ratio = 0;
     startVal = t;
@@ -30,6 +30,7 @@ TweenDuino::Tween::Tween(float& t, unsigned long duration, float finalVal)
     completed = false;
     ease = nullptr;
     startTime = 0;
+    lastUpdateTime = 0;
   }
 
 TweenDuino::Tween *TweenDuino::Tween::to(float& target, unsigned long duration, float to) {
@@ -46,7 +47,7 @@ TweenDuino::Tween *TweenDuino::Tween::to(float& target, unsigned long duration, 
 }
 
 bool TweenDuino::Tween::isActive() {
-  return initialized && time < duration;
+  return initialized && lastUpdateTime >= startTime && !completed;
 }
 
 bool TweenDuino::Tween::isComplete() {
@@ -113,7 +114,7 @@ void TweenDuino::Tween::update(unsigned long updTime) {
 
   // We set startVal here instead of begin() because we want to be able to cooperate with
   // other code that might have adjusted the "target" value before we started to touch it.
-  if (firstUpdate) {
+  if (onFirstUpdate) {
     startVal = target;
     totalChange = finalVal - startVal;
   }
@@ -136,7 +137,8 @@ void TweenDuino::Tween::update(unsigned long updTime) {
     ratio = getRatio((float)(time - startTime) / (float)duration);
   }
 
-  firstUpdate = false;
+  onFirstUpdate = false;
+  lastUpdateTime = updTime;
 
   // Save ourselves some cycles if haven't moved ahead in time,
   // or if we're done rendering.
@@ -150,8 +152,9 @@ void TweenDuino::Tween::update(unsigned long updTime) {
 void TweenDuino::Tween::restartFrom(unsigned long newStart) {
   completed = false;
   initialized = false;
-  firstUpdate = true;
+  onFirstUpdate = true;
   time = 0;
+  lastUpdateTime = 0;
   startTime = newStart;
 }
 
