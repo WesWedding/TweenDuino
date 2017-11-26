@@ -30,6 +30,12 @@ bool TweenDuino::Timeline::isComplete() {
     return completed;
 }
 
+TweenDuino::Tween* TweenDuino::Timeline::addTo(float& target, float to, unsigned long duration) {
+    Tween* tween = TweenDuino::Tween::to(target, duration, to);
+    add(*tween);
+    return tween;
+}
+
 /**
  * Add tweens to this timeline.
  *

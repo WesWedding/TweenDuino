@@ -19,7 +19,7 @@ public:
     bool isActive();
     void update(unsigned long time);
 
-    TweenDuino::Tween* addTo(float& target, unsigned long duration, float to);
+    TweenDuino::Tween* addTo(float& target, float to,  unsigned long duration);
     bool add(TweenDuino::Tween &tween);
     void restartFrom(unsigned long newStart);
     int maxChildren();
