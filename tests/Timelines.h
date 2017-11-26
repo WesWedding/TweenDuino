@@ -23,33 +23,35 @@ test(timelineCompletesOnFinalMS)
   const unsigned long dur2 = 300UL;
   TweenDuino::Tween tween2(val, dur2, stop2);
 
-  const float stop3 = 130.0;
-  const unsigned long dur3 = 100UL;
-  TweenDuino::Tween tween3(val, dur3, stop3);
-
   tl.add(tween1);
   tl.add(tween2);
-  tl.add(tween3);
+
+  const float stop3 = 130.0;
+  const unsigned long dur3 = 100UL;
+  TweenDuino::Tween* tween3Ptr = tl.addTo(val, dur3, stop3);
 
   tl.update(0UL);
   assertEqual(val, 0.0);
   assertFalse(tl.isComplete());
   assertFalse(tween1.isComplete());
+  assertFalse(tl.isComplete());
 
   tl.update(dur1);
   assertEqual(val, stop1);
   assertFalse(tl.isComplete());
   assertTrue(tween1.isComplete());
+  assertFalse(tl.isComplete());
 
   tl.update(dur1 + dur2);
   assertEqual(val, stop2);
   assertFalse(tl.isComplete());
   assertTrue(tween2.isComplete());
+  assertFalse(tl.isComplete());
 
   tl.update(dur1 + dur2 + dur3);
   assertEqual(val, stop3);
   assertTrue(tl.isComplete());
-  assertTrue(tween3.isComplete());
+  assertTrue(tween3Ptr->isComplete());
 
   // One last check... just for the heck of it.
   tl.update(dur1 + dur2 + dur3 + 1000UL);
@@ -152,10 +154,20 @@ test(restartTimelineRestartsTweens)
   tl.update(0UL);
   tl.update(dur1 + dur2 + dur3);
   assertTrue(tl.isComplete());
+  assertTrue(tween1.isComplete());
+  assertTrue(tween2.isComplete());
+  assertTrue(tween3.isComplete());
+  assertEqual(stop3, val);
   tl.restartFrom(300UL);
+  assertEqual(stop3, val);
+  tl.update(300UL);
+  assertTrue(tween1.isActive());
+  assertFalse(tween2.isActive());
+  assertFalse(tween3.isActive());
   assertFalse(tween1.isComplete());
   assertFalse(tween2.isComplete());
   assertFalse(tween3.isComplete());
+  assertFalse(tl.isComplete());
 }
 
 /**

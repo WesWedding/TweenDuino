@@ -151,7 +151,6 @@ void TweenDuino::Tween::update(unsigned long updTime) {
 
 void TweenDuino::Tween::restartFrom(unsigned long newStart) {
   completed = false;
-  initialized = false;
   onFirstUpdate = true;
   time = 0;
   lastUpdateTime = 0;

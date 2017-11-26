@@ -130,9 +130,8 @@ void TweenDuino::Timeline::restartFrom(unsigned long newTime) {
     for (int i = 0; i < TWEEN_TIMELINE_SIZE && tweens[i].tween != nullptr; i++) {
         TimelineEntry entry = tweens[i];
 
-        entry.tween->update(totalTime);
-        entry.tween->restartFrom(entryStart);
-        
+        entry.tween->restartFrom(entryStart);        
+
         // Next entry starts at...
         entryStart += entry.tween->getDuration();
     }
