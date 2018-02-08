@@ -36,6 +36,12 @@ TweenDuino::Tween* TweenDuino::Timeline::addTo(float& target, float to, unsigned
     return tween;
 }
 
+TweenDuino::Tween* TweenDuino::Timeline::addTo(float& target, float to, unsigned long duration, TweenDuino::Tween::Ease e, TweenDuino::Tween::EaseType type) {
+    Tween* tween = TweenDuino::Tween::to(target, duration, to, e, type);
+    add(*tween);
+    return tween;
+}
+
 /**
  * Add tweens to this timeline.
  *

@@ -42,7 +42,6 @@ TweenDuino::Tween *TweenDuino::Tween::to(float& target, unsigned long duration, 
 TweenDuino::Tween *TweenDuino::Tween::to(float& target, unsigned long duration, float to, Ease ease, EaseType type) {
   Tween *tween = new Tween(target, duration, to);
   tween->setTween(ease, type);
-
   return tween;
 }
 
