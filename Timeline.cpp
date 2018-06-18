@@ -9,6 +9,9 @@
 #endif
 
 TweenDuino::Timeline::TimelineEntry::TimelineEntry(): tween(nullptr) {}
+TweenDuino::Timeline::TimelineEntry::~TimelineEntry() {
+	if (tween) delete tween;
+}
 
 TweenDuino::Timeline::Timeline(): 
     totalDuration(0), 
@@ -17,6 +20,23 @@ TweenDuino::Timeline::Timeline():
     completed(false), 
     initialized(false),
     lastUpdateTime(0) {}
+
+void TweenDuino::Timeline::wipe(){
+	totalDuration = 0;
+    totalTime = 0;
+    startTime = 0;
+    completed = false;
+    initialized = false;
+    lastUpdateTime = 0;
+	
+	for (int i = 0; i < TWEEN_TIMELINE_SIZE; i++) {
+        if (tweens[i].tween) {
+			delete tweens[i].tween;
+			tweens[i].tween = nullptr;
+		}
+    }
+}
+
 
 int TweenDuino::Timeline::maxChildren() {
     return TWEEN_TIMELINE_SIZE;
@@ -62,6 +82,7 @@ bool TweenDuino::Timeline::add(TweenDuino::Tween &tween) {
 
     TweenDuino::Timeline::TimelineEntry &entry = tweens[entryIndex];
     if (entry.tween != nullptr) {
+		delete &tween;
         return false;
     }
     // i is pointing at an "empty" TimelineEntry at this point.  This tween's new home!
@@ -106,7 +127,7 @@ void TweenDuino::Timeline::update(unsigned long newTime) {
     // Maintenance Note: Very similar looping logic in TweenDuino::Timeline::add & restart.
     // If you change this line here, you might need to change it there.
     for (int i = 0; i < TWEEN_TIMELINE_SIZE && tweens[i].tween != nullptr; i++) {
-        TimelineEntry entry = tweens[i];
+		TweenDuino::Timeline::TimelineEntry &entry = tweens[i];
         Tween *tween = entry.tween;
         //Serial.print("About to check next start");  delay(100);
         const unsigned long started = tween->getStartTime();
@@ -140,7 +161,7 @@ void TweenDuino::Timeline::restartFrom(unsigned long newTime) {
     // Maintenance Note: Very similar looping logic in TweenDuino::Timeline::add & update
     // If you change this line here, you might need to change it there.
     for (int i = 0; i < TWEEN_TIMELINE_SIZE && tweens[i].tween != nullptr; i++) {
-        TimelineEntry entry = tweens[i];
+        TweenDuino::Timeline::TimelineEntry &entry = tweens[i];
 
         entry.tween->restartFrom(entryStart);        
 

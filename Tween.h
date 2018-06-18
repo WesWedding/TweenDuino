@@ -22,6 +22,7 @@ public:
     enum EaseType { IN, OUT, INOUT, NONE };
     
     Tween(float &val, unsigned long duration, float to);
+	~Tween();
 
     static Tween *to(float& target, unsigned long duration, float to);
     static Tween *to(float& target, unsigned long duration, float to, Ease ease, EaseType type);
