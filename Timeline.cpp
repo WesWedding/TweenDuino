@@ -10,7 +10,7 @@
 
 TweenDuino::Timeline::TimelineEntry::TimelineEntry(): tween(nullptr) {}
 TweenDuino::Timeline::TimelineEntry::~TimelineEntry() {
-	if (tween) delete tween;
+    if (tween) delete tween;
 }
 
 TweenDuino::Timeline::Timeline(): 
@@ -21,19 +21,19 @@ TweenDuino::Timeline::Timeline():
     initialized(false),
     lastUpdateTime(0) {}
 
-void TweenDuino::Timeline::wipe(){
-	totalDuration = 0;
+void TweenDuino::Timeline::wipe() {
+    totalDuration = 0;
     totalTime = 0;
     startTime = 0;
     completed = false;
     initialized = false;
     lastUpdateTime = 0;
-	
-	for (int i = 0; i < TWEEN_TIMELINE_SIZE; i++) {
+
+    for (int i = 0; i < TWEEN_TIMELINE_SIZE; i++) {
         if (tweens[i].tween) {
-			delete tweens[i].tween;
-			tweens[i].tween = nullptr;
-		}
+            delete tweens[i].tween;
+            tweens[i].tween = nullptr;
+        }
     }
 }
 
@@ -52,13 +52,21 @@ bool TweenDuino::Timeline::isComplete() {
 
 TweenDuino::Tween* TweenDuino::Timeline::addTo(float& target, float to, unsigned long duration) {
     Tween* tween = TweenDuino::Tween::to(target, duration, to);
-    add(*tween);
+    if (!add(*tween)) {
+        // Oops, no room!
+        delete tween;
+        tween = nullptr;
+    }
     return tween;
 }
 
 TweenDuino::Tween* TweenDuino::Timeline::addTo(float& target, float to, unsigned long duration, TweenDuino::Tween::Ease e, TweenDuino::Tween::EaseType type) {
     Tween* tween = TweenDuino::Tween::to(target, duration, to, e, type);
-    add(*tween);
+    if (!add(*tween)) {
+        // Oops, no room!
+        delete tween;
+        tween = nullptr;
+    }
     return tween;
 }
 
@@ -82,7 +90,6 @@ bool TweenDuino::Timeline::add(TweenDuino::Tween &tween) {
 
     TweenDuino::Timeline::TimelineEntry &entry = tweens[entryIndex];
     if (entry.tween != nullptr) {
-		delete &tween;
         return false;
     }
     // i is pointing at an "empty" TimelineEntry at this point.  This tween's new home!
@@ -127,7 +134,7 @@ void TweenDuino::Timeline::update(unsigned long newTime) {
     // Maintenance Note: Very similar looping logic in TweenDuino::Timeline::add & restart.
     // If you change this line here, you might need to change it there.
     for (int i = 0; i < TWEEN_TIMELINE_SIZE && tweens[i].tween != nullptr; i++) {
-		TweenDuino::Timeline::TimelineEntry &entry = tweens[i];
+        TweenDuino::Timeline::TimelineEntry &entry = tweens[i];
         Tween *tween = entry.tween;
         //Serial.print("About to check next start");  delay(100);
         const unsigned long started = tween->getStartTime();

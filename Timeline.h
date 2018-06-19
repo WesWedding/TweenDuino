@@ -15,7 +15,7 @@ class Timeline {
 public:
     Timeline();
 
-	void wipe();
+    void wipe();
 
     void begin(unsigned long startTime);
     bool isActive();

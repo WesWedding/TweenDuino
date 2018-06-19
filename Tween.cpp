@@ -34,7 +34,7 @@ TweenDuino::Tween::Tween(float& t, unsigned long duration, float finalVal)
 }
 
 TweenDuino::Tween::~Tween() {
-	if (ease) delete ease;
+    if (ease) delete ease;
 }
 
 TweenDuino::Tween *TweenDuino::Tween::to(float& target, unsigned long duration, float to) {
