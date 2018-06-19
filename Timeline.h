@@ -23,7 +23,7 @@ public:
 
     TweenDuino::Tween* addTo(float& target, float to,  unsigned long duration);
     TweenDuino::Tween* addTo(float& target, float to,  unsigned long duration, TweenDuino::Tween::Ease e, TweenDuino::Tween::EaseType type);
-    
+
     bool add(TweenDuino::Tween &tween);
     void restartFrom(unsigned long newStart);
     int maxChildren();
