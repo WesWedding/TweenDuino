@@ -31,7 +31,11 @@ TweenDuino::Tween::Tween(float& t, unsigned long duration, float finalVal)
     ease = nullptr;
     startTime = 0;
     lastUpdateTime = 0;
-  }
+}
+
+TweenDuino::Tween::~Tween() {
+    if (ease) delete ease;
+}
 
 TweenDuino::Tween *TweenDuino::Tween::to(float& target, unsigned long duration, float to) {
   Tween *tween = new Tween(target, duration, to);
@@ -62,6 +66,12 @@ unsigned long TweenDuino::Tween::getStartTime() {
 }
 
 void TweenDuino::Tween::setTween(Ease e, EaseType type) {
+
+  if (ease != nullptr){
+    delete ease;
+    ease = nullptr;
+  }
+
   switch(e) { 
     case LINEAR:
       ease = new LinearEase();
