@@ -90,6 +90,7 @@ bool TweenDuino::Timeline::add(TweenDuino::Tween &tween) {
 
     TweenDuino::Timeline::TimelineEntry &entry = tweens[entryIndex];
     if (entry.tween != nullptr) {
+        // We didn't have room for the tween.
         return false;
     }
     // i is pointing at an "empty" TimelineEntry at this point.  This tween's new home!
