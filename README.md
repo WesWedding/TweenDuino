@@ -60,5 +60,7 @@ void loop() {
 Output:
 `Values: 0.00, 0.02, 0.04, 0.07, ... , 254.98, 255.00, 255.00, 255.00, ... `
 
+## Code of Conduct
+This project adheres to the Contributor Covenenant [code of conduct](code-of-conduct.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to conduct@wawco.com.
 
 [1]: http://andybrown.me.uk/downloads/
