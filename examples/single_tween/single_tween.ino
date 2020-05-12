@@ -8,13 +8,13 @@
 const int led = 7;
 
 // A value to pass into a tween.
-double value = 20.0;
+float value = 20.0;
 
-TweenDuino *tween;
+TweenDuino::Tween *tween;
 
 void setup() {
     // Tween to 255.0 from the existing value over 10,000 milliseconds (10 secs).
-    tween = TweenDuino::to(value, 10000UL, 255);
+    tween = TweenDuino::Tween::to(value, 10000UL, 255);
     Serial.print("Values: ");
 }
 void loop() {
