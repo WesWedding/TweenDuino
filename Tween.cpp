@@ -20,6 +20,8 @@
 
 TweenDuino::Tween::Tween(float& t, unsigned long duration, float finalVal) 
   : target(t), duration(duration), finalVal(finalVal) {
+  
+    // TODO: Turn this into a function that can also be used in initializer and reset().
     initialized = false;
     active = false;
     onFirstUpdate = true;
@@ -94,6 +96,30 @@ void TweenDuino::Tween::setTween(Ease e, EaseType type) {
   }
 
   easeType = type;
+}
+
+/**
+ * Reuse this tween, targetting a new end-value and leaving it in a fresh state.
+ *
+ * Requires a subsequent call to begin().
+ */
+void TweenDuino::Tween::reset(float& newTarget, unsigned long newDuration, float to) {
+  target = newTarget;
+  duration = newDuration;
+  finalVal = to;
+  
+  // TODO: Turn this into a function that can also be used in initializer.
+  initialized = false;
+  active = false;
+  onFirstUpdate = true;
+  time = 0;
+  ratio = 0;
+  startVal = newTarget;
+  totalChange = finalVal - startVal;
+  completed = false;
+  ease = nullptr;
+  startTime = 0;
+  lastUpdateTime = 0;
 }
 
 void TweenDuino::Tween::begin(unsigned long timeMs) {
