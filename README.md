@@ -14,8 +14,29 @@ Using a timeline allows you use this tween sequence to do complicated animations
 or behaviors that would otherwise require potentially hard to understand for loops or mathmatical formulae.
 
 ## Additional Library Required
-Currently depends on [Andy Brown's easing library][1] for the easing math.
+Currently depends on the [Easing library][1], a version of [Andy Brown's original easing library][2] for the easing math.
 
+### Easing library bug and workaround
+The Easing library does not #include the math library by default, which can prevent compilation from being successful because functions like `sqrt`, `cos`, and `sin` are unrecognized.
+
+The workaround is quite simple; you merely need to add `#include <math.h>` to a single file located in your [libraries folder][3].
+
+In file `Easing.h`, change these lines as follows:
+```cpp
+#pragma once
+#ifndef HT_TWEEN_EASING_LIBRARY_H
+#define HT_TWEEN_EASING_LIBRARY_H
+```
+
+to
+
+```cpp
+#pragma once
+#ifndef HT_TWEEN_EASING_LIBRARY_H
+#define HT_TWEEN_EASING_LIBRARY_H
+
+#include <math.h>
+```
 
 ## Usage
 By default, a Timeline comes with enough storage for 10 tweens.  If you want to reduce the memory footprint (or increase the number of tweens you want to store) you will want to use a `#define TIMELINE_SIZE XXX` statement, where "XXX" is an integer value, to control this.  Make sure this #define happens before your include statement!
@@ -63,4 +84,6 @@ Output:
 ## Code of Conduct
 This project adheres to the Contributor Covenenant [code of conduct](code-of-conduct.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to conduct@wawco.com.
 
-[1]: http://andybrown.me.uk/downloads/
+[1]: https://github.com/hideakitai/Easing
+[2]: http://andybrown.me.uk/downloads/
+[3]: https://support.arduino.cc/hc/en-us/articles/4415103213714-Find-sketches-libraries-board-cores-and-other-files-on-your-computer
