@@ -74,22 +74,22 @@ void TweenDuino::Tween::setTween(Ease e, EaseType type) {
 
   switch(e) { 
     case LINEAR:
-      ease = new LinearEase();
+      ease = new ht::ease::LinearEase();
       break;
     case SINE:
-      ease = new SineEase();
+      ease = new ht::ease::SineEase();
       break;
     case QUAD:
-      ease = new QuadraticEase();
+      ease = new ht::ease::QuadraticEase();
       break;
     case QUART:
-      ease = new QuarticEase();
+      ease = new ht::ease::QuarticEase();
       break;
     case QUINT:
-      ease = new QuinticEase();
+      ease = new ht::ease::QuinticEase();
       break;
     case CUBIC:
-      ease = new CubicEase();
+      ease = new ht::ease::CubicEase();
       break;
   }
 
@@ -105,8 +105,8 @@ void TweenDuino::Tween::begin(unsigned long timeMs) {
 
   // These are somewhat arbitrary values to just get the ease values working.
   // The actual tween result will be derived from actual time passage and what value we're tweening to/from.
-  ease->setDuration(1);
-  ease->setTotalChangeInPosition(1);
+  ease->duration(1);
+  ease->scale(1);
 
   initialized = true;
 }

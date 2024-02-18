@@ -12,7 +12,8 @@
 #ifndef TWEEN_DUINO_TWEEN_H
 #define TWEEN_DUINO_TWEEN_H
 
-#include <EasingLibrary.h>
+#include <math.h>
+#include <Easing.h>
 
 namespace TweenDuino {
 
@@ -55,7 +56,7 @@ private:
     float totalChange;
 
     EaseType easeType;
-    EasingBase *ease;
+    ht::ease::EasingBase *ease;
     double getRatio(float);
 };
 
