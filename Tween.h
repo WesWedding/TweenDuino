@@ -12,6 +12,7 @@
 #ifndef TWEEN_DUINO_TWEEN_H
 #define TWEEN_DUINO_TWEEN_H
 
+#include <math.h>
 #include <Easing.h>
 
 namespace TweenDuino {
