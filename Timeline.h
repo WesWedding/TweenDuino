@@ -36,10 +36,14 @@ private:
     public:
         TimelineEntry();
         ~TimelineEntry();
+        // Is the timeline responsible for this tween, or did it come from external code?
+        bool tlManagedTween = false;  
         Tween *tween;
     };
 
     TweenDuino::Timeline::TimelineEntry tweens[TWEEN_TIMELINE_SIZE];
+
+    bool addEntry(TweenDuino::Tween &tween, bool managed = false);
 
     unsigned long totalDuration;
     unsigned long totalTime;

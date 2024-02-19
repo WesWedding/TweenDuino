@@ -1,16 +1,16 @@
-#include <ArduinoUnit.h>
+#include <ArduinoUnitTests.h>
 #include <TweenDuino.h>
 
 #include "config.h"
 
-test(emptyTimelineCompletes)
+unittest(emptyTimelineCompletes)
 {
   TweenDuino::Timeline tl;
   tl.update(0UL);
   assertTrue(tl.isComplete());
 }
 
-test(timelineCompletesOnFinalMS)
+unittest(timelineCompletesOnFinalMS)
 {
   TweenDuino::Timeline tl;
 
@@ -28,38 +28,40 @@ test(timelineCompletesOnFinalMS)
 
   const float stop3 = 130.0;
   const unsigned long dur3 = 100UL;
-  TweenDuino::Tween* tween3Ptr = tl.addTo(val, dur3, stop3);
+  TweenDuino::Tween* tween3Ptr = tl.addTo(val, stop3, dur3);
+
+  assertEqual(dur1 + dur2 + dur3, tl.getDuration());
 
   tl.update(0UL);
-  assertEqual(val, 0.0);
+  assertEqual(0.0, val);
   assertFalse(tl.isComplete());
   assertFalse(tween1.isComplete());
   assertFalse(tl.isComplete());
 
   tl.update(dur1);
-  assertEqual(val, stop1);
+  assertEqual(stop1, val);
   assertFalse(tl.isComplete());
   assertTrue(tween1.isComplete());
   assertFalse(tl.isComplete());
 
   tl.update(dur1 + dur2);
-  assertEqual(val, stop2);
+  assertEqual(stop2, val);
   assertFalse(tl.isComplete());
   assertTrue(tween2.isComplete());
   assertFalse(tl.isComplete());
 
   tl.update(dur1 + dur2 + dur3);
-  assertEqual(val, stop3);
+  assertEqual(stop3, val);
   assertTrue(tl.isComplete());
   assertTrue(tween3Ptr->isComplete());
 
   // One last check... just for the heck of it.
   tl.update(dur1 + dur2 + dur3 + 1000UL);
-  assertEqual(val, stop3);
+  assertEqual(stop3, val);
   assertTrue(tl.isComplete());
 }
 
-test(timelineDurationMatchesTweenDurations)
+unittest(timelineDurationMatchesTweenDurations)
 {
   TweenDuino::Timeline tl;
 
@@ -75,10 +77,10 @@ test(timelineDurationMatchesTweenDurations)
   tl.add(tween1);
   tl.add(tween2);
 
-  assertEqual(tl.getDuration(), tween1.getDuration() + tween2.getDuration());
+  assertEqual(tween1.getDuration() + tween2.getDuration(), tl.getDuration());
 }
 
-test(timelineStartingAfterZeroMillisFinishesWhenExpected)
+unittest(timelineStartingAfterZeroMillisFinishesWhenExpected)
 {
   TweenDuino::Timeline tl;
 
@@ -105,7 +107,7 @@ test(timelineStartingAfterZeroMillisFinishesWhenExpected)
   assertTrue(tl.isComplete());
 }
 
-test(timelineStartingAfterZeroMillisUpdatesValueCorrectly)
+unittest(timelineStartingAfterZeroMillisUpdatesValueCorrectly)
 {
   TweenDuino::Timeline tl;
 
@@ -130,7 +132,7 @@ test(timelineStartingAfterZeroMillisUpdatesValueCorrectly)
   assertEqual(val, stop2);
 }
 
-test(restartTimelineRestartsTweens)
+unittest(restartTimelineRestartsTweens)
 {
   TweenDuino::Timeline tl;
 
@@ -175,7 +177,7 @@ test(restartTimelineRestartsTweens)
  * 
  * Strange behavior would appear when adding too many tweens.
  */
-test(rejectTooManyTweens)
+unittest(rejectTooManyTweens)
 {
   TweenDuino::Timeline tl;
   const int maxTweens = tl.maxChildren();
@@ -183,11 +185,13 @@ test(rejectTooManyTweens)
   bool added = false;
   for (int i = 0; i < maxTweens; i++)
   {
-    added = tl.add(*TweenDuino::Tween::to(val, 100UL, 123.0));
+    added = tl.addTo(val, 123.0, 100UL);
     assertTrue(added);
   }
 
-  added = tl.add(*TweenDuino::Tween::to(val, 100UL, 123.0));
+  added = tl.addTo(val, 123.0, 100UL);
   assertFalse(added);
   
 }
+
+unittest_main()

@@ -1,4 +1,4 @@
-#include <ArduinoUnit.h>
+#include <ArduinoUnitTests.h>
 #include <TweenDuino.h>
 
 /**
@@ -6,16 +6,16 @@
  * 
  * A tween trying to tween from 0.0 to 0.0 would crash.
  */
-test(finalAndInitialAreZero)
+unittest(finalAndInitialAreZero)
 {
   float val = 0.0;
   TweenDuino::Tween tween(val, 56734UL, 0.0);
   tween.update(0UL);
   tween.update(1000UL);
   tween.update(56734UL);
-  assertEqual(val, 0.0);
+  assertEqual(0.0, val);
   tween.update(56735UL);
-  assertEqual(val, 0.0);
+  assertEqual(0.0, val);
 }
 
 /**
@@ -23,22 +23,22 @@ test(finalAndInitialAreZero)
  * 
  * A tween trying to tween from 0.0 to 0.0 would crash.
  */
-test(valsetToZeroDuringTweenToZero)
+unittest(valsetToZeroDuringTweenToZero)
 {
   float val = 100.0;
   TweenDuino::Tween tween(val, 56734UL, 0.0);
   tween.update(0UL);
-  assertNotEqual(val, 0.0);
+  assertNotEqual(0.0, val);
   val = 0.0;
   tween.update(1000UL);
-  assertNotEqual(val, 0.0);
+  assertNotEqual(0.0, val);
   tween.update(56734UL);
-  assertEqual(val, 0.0);
+  assertEqual(0.0, val);
   tween.update(56735UL);
-  assertEqual(val, 0.0);
+  assertEqual(0.0, val);
 }
 
-test(valStartsAtExpectedVal) {
+unittest(valStartsAtExpectedVal) {
   float val = 0.0;
   TweenDuino::Tween tween(val, 56734UL, 255.0);
   tween.update(10UL);
@@ -56,18 +56,18 @@ test(valStartsAtExpectedVal) {
  * 
  * @see: https://github.com/stickywes/TweenDuino/issues/12
  * */
-test(valueStartsAtValExpectedInTimeline) {
+unittest(valueStartsAtValExpectedInTimeline) {
   float brightness = 0.0f;
 
   TweenDuino::Timeline tl;
 
   // Slowly ramp up brightness.
-  tl.add(*TweenDuino::Tween::to(brightness, 5000, 1.0));
-  tl.add(*TweenDuino::Tween::to(brightness, 13000, 0.5));
-  tl.add(*TweenDuino::Tween::to(brightness, 5000, 1.0));
+  tl.addTo(brightness, 1.0, 5000);
+  tl.addTo(brightness, 0.5, 13000);
+  tl.addTo(brightness, 1.0, 5000);
 
   tl.update(40);
-  assertEqual(brightness, 0.0);
+  assertEqual(0.0, brightness);
   tl.update(5002);
   assertMore(brightness, 0.9);
   assertLessOrEqual(brightness, 1.0);
@@ -79,3 +79,5 @@ test(valueStartsAtValExpectedInTimeline) {
   tl.update(19000);
   assertMoreOrEqual(brightness, 0.5);
 }
+
+unittest_main()
