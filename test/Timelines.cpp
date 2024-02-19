@@ -28,7 +28,7 @@ unittest(timelineCompletesOnFinalMS)
 
   const float stop3 = 130.0;
   const unsigned long dur3 = 100UL;
-  TweenDuino::Tween* tween3Ptr = tl.addTo(val, dur3, stop3);
+  TweenDuino::Tween* tween3Ptr = tl.addTo(val, stop3, dur3);
 
   tl.update(0UL);
   assertEqual(val, 0.0);
