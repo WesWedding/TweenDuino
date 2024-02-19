@@ -1,4 +1,4 @@
-#include <ArduinoUnit.h>
+#include <ArduinoUnitTests.h>
 #include <TweenDuino.h>
 
 /**
@@ -6,7 +6,7 @@
  * 
  * A tween trying to tween from 0.0 to 0.0 would crash.
  */
-test(finalAndInitialAreZero)
+unittest(finalAndInitialAreZero)
 {
   float val = 0.0;
   TweenDuino::Tween tween(val, 56734UL, 0.0);
@@ -23,7 +23,7 @@ test(finalAndInitialAreZero)
  * 
  * A tween trying to tween from 0.0 to 0.0 would crash.
  */
-test(valsetToZeroDuringTweenToZero)
+unittest(valsetToZeroDuringTweenToZero)
 {
   float val = 100.0;
   TweenDuino::Tween tween(val, 56734UL, 0.0);
@@ -38,7 +38,7 @@ test(valsetToZeroDuringTweenToZero)
   assertEqual(val, 0.0);
 }
 
-test(valStartsAtExpectedVal) {
+unittest(valStartsAtExpectedVal) {
   float val = 0.0;
   TweenDuino::Tween tween(val, 56734UL, 255.0);
   tween.update(10UL);
@@ -56,7 +56,7 @@ test(valStartsAtExpectedVal) {
  * 
  * @see: https://github.com/stickywes/TweenDuino/issues/12
  * */
-test(valueStartsAtValExpectedInTimeline) {
+unittest(valueStartsAtValExpectedInTimeline) {
   float brightness = 0.0f;
 
   TweenDuino::Timeline tl;
@@ -79,3 +79,5 @@ test(valueStartsAtValExpectedInTimeline) {
   tl.update(19000);
   assertMoreOrEqual(brightness, 0.5);
 }
+
+unittest_main()

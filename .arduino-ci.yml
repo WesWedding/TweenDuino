@@ -1,0 +1,4 @@
+unittest:
+  libraries:
+    - Easing
+    - Adafruit NeoPixel

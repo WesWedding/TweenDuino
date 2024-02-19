@@ -1,16 +1,16 @@
-#include <ArduinoUnit.h>
+#include <ArduinoUnitTests.h>
 #include <TweenDuino.h>
 
 #include "config.h"
 
-test(emptyTimelineCompletes)
+unittest(emptyTimelineCompletes)
 {
   TweenDuino::Timeline tl;
   tl.update(0UL);
   assertTrue(tl.isComplete());
 }
 
-test(timelineCompletesOnFinalMS)
+unittest(timelineCompletesOnFinalMS)
 {
   TweenDuino::Timeline tl;
 
@@ -59,7 +59,7 @@ test(timelineCompletesOnFinalMS)
   assertTrue(tl.isComplete());
 }
 
-test(timelineDurationMatchesTweenDurations)
+unittest(timelineDurationMatchesTweenDurations)
 {
   TweenDuino::Timeline tl;
 
@@ -78,7 +78,7 @@ test(timelineDurationMatchesTweenDurations)
   assertEqual(tl.getDuration(), tween1.getDuration() + tween2.getDuration());
 }
 
-test(timelineStartingAfterZeroMillisFinishesWhenExpected)
+unittest(timelineStartingAfterZeroMillisFinishesWhenExpected)
 {
   TweenDuino::Timeline tl;
 
@@ -105,7 +105,7 @@ test(timelineStartingAfterZeroMillisFinishesWhenExpected)
   assertTrue(tl.isComplete());
 }
 
-test(timelineStartingAfterZeroMillisUpdatesValueCorrectly)
+unittest(timelineStartingAfterZeroMillisUpdatesValueCorrectly)
 {
   TweenDuino::Timeline tl;
 
@@ -130,7 +130,7 @@ test(timelineStartingAfterZeroMillisUpdatesValueCorrectly)
   assertEqual(val, stop2);
 }
 
-test(restartTimelineRestartsTweens)
+unittest(restartTimelineRestartsTweens)
 {
   TweenDuino::Timeline tl;
 
@@ -175,7 +175,7 @@ test(restartTimelineRestartsTweens)
  * 
  * Strange behavior would appear when adding too many tweens.
  */
-test(rejectTooManyTweens)
+unittest(rejectTooManyTweens)
 {
   TweenDuino::Timeline tl;
   const int maxTweens = tl.maxChildren();
@@ -191,3 +191,5 @@ test(rejectTooManyTweens)
   assertFalse(added);
   
 }
+
+unittest_main()

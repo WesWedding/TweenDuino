@@ -1,4 +1,4 @@
-#include <ArduinoUnit.h>
+#include <ArduinoUnitTests.h>
 #include <TweenDuino.h>
 
 #include "config.h"
@@ -6,9 +6,9 @@
 float increasingFloat = 0.0;
 TweenDuino::Tween increasing(increasingFloat, CONTINUOUS_DURATION, 100.0);
 
-testing(increasingTween)
+unittest(increasingTween)
 {
-  unsigned long t = millis();
+  unsigned long t = 100;  // No millis() for us, alas.  Not sure why, though.
   increasing.update(t);
   assertLessOrEqual(increasingFloat, 100.0);
   assertMoreOrEqual(increasingFloat, 0.0);
@@ -18,16 +18,15 @@ testing(increasingTween)
   {
     assertEqual(increasingFloat, 100.0);
     assertTrue(increasing.isComplete());
-    pass();
   }
 }
 
 float decreasingFloat = 100.0;
 TweenDuino::Tween decreasing(decreasingFloat, CONTINUOUS_DURATION, 0.0);
 
-testing(decreasingTween)
+unittest(decreasingTween)
 {
-  unsigned long t = millis();
+  unsigned long t = 100;  // No millis() for us, alas.  Not sure why, though.
   decreasing.update(t);
   assertLessOrEqual(decreasingFloat, 100.0);
   assertMoreOrEqual(decreasingFloat, 0.0);
@@ -37,11 +36,10 @@ testing(decreasingTween)
   {
     assertEqual(decreasingFloat, 0.0);
     assertTrue(decreasing.isComplete());
-    pass();
   }
 }
 
-test(tweenCompleteAtDurationReached)
+unittest(tweenCompleteAtDurationReached)
 {
   float val = 0.0;
   TweenDuino::Tween tween(val, 56734UL, 0.0);
@@ -52,7 +50,7 @@ test(tweenCompleteAtDurationReached)
   assertTrue(tween.isComplete());
 }
 
-test(finalAndInitialAreSame)
+unittest(finalAndInitialAreSame)
 {
   float val = 4640.0;
   TweenDuino::Tween tween(val, 56734UL, 4640.0);
@@ -66,7 +64,7 @@ test(finalAndInitialAreSame)
   assertEqual(val, 4640.0);
 }
 
-test(tweenHitsMaxEvenIfFinalMilliSkipped)
+unittest(tweenHitsMaxEvenIfFinalMilliSkipped)
 {
   float val = 10.0;
   TweenDuino::Tween tween(val, 8732UL, 9820.34);
@@ -79,7 +77,7 @@ test(tweenHitsMaxEvenIfFinalMilliSkipped)
   assertTrue(tween.isComplete());
 }
 
-test(tweenWontExceedFinalValueAtEdges)
+unittest(tweenWontExceedFinalValueAtEdges)
 {
   float val = 10.0;
   TweenDuino::Tween tween(val, 8732UL, 9820.34);
@@ -89,7 +87,7 @@ test(tweenWontExceedFinalValueAtEdges)
   assertEqual(val, 9820.34);
 }
 
-test(tweenStartingAfterZeroMillis)
+unittest(tweenStartingAfterZeroMillis)
 {
   float val = 0.0;
   TweenDuino::Tween tween(val, 400UL, 100.0);
@@ -100,7 +98,7 @@ test(tweenStartingAfterZeroMillis)
   assertMore(val, 0.0);
 }
 
-test(restartingCompletedTweenNotComplete)
+unittest(restartingCompletedTweenNotComplete)
 {
   float val = 0.0;
   TweenDuino::Tween tween(val, 400UL, 100.0);
@@ -112,7 +110,7 @@ test(restartingCompletedTweenNotComplete)
   assertFalse(tween.isComplete());
 }
 
-test(restartingTweenStartsFromNewVal)
+unittest(restartingTweenStartsFromNewVal)
 {
   float val = 0.0;
   TweenDuino::Tween tween(val, 400UL, 100.0);
@@ -126,3 +124,5 @@ test(restartingTweenStartsFromNewVal)
   tween.update(300UL);
   assertEqual(100.0, val);
 }
+
+unittest_main()
