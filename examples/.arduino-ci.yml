@@ -1,3 +1,6 @@
+# Unfortunately, ArduinoCI triggers an error in Arduino Neo Pixel.h so we can't test the examples automatically.
+# See: https://github.com/WesWedding/TweenDuino/issues/27
 compile:
   libraries:
     - Adafruit NeoPixel
+  
