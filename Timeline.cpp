@@ -10,7 +10,11 @@
 
 TweenDuino::Timeline::TimelineEntry::TimelineEntry(): tween(nullptr) {}
 TweenDuino::Timeline::TimelineEntry::~TimelineEntry() {
-    if (tween) delete tween;
+    // If the Timeline didn't make this tween, it's not the timeline's leak to worry about.
+    if (tlManagedTween && tween != nullptr) {
+      delete tween;
+      tween = nullptr;
+    }
 }
 
 TweenDuino::Timeline::Timeline(): 
@@ -52,7 +56,7 @@ bool TweenDuino::Timeline::isComplete() {
 
 TweenDuino::Tween* TweenDuino::Timeline::addTo(float& target, float to, unsigned long duration) {
     Tween* tween = TweenDuino::Tween::to(target, duration, to);
-    if (!add(*tween)) {
+    if (!addEntry(*tween, true)) {
         // Oops, no room!
         delete tween;
         tween = nullptr;
@@ -62,12 +66,17 @@ TweenDuino::Tween* TweenDuino::Timeline::addTo(float& target, float to, unsigned
 
 TweenDuino::Tween* TweenDuino::Timeline::addTo(float& target, float to, unsigned long duration, TweenDuino::Tween::Ease e, TweenDuino::Tween::EaseType type) {
     Tween* tween = TweenDuino::Tween::to(target, duration, to, e, type);
-    if (!add(*tween)) {
+    if (!addEntry(*tween, true)) {
         // Oops, no room!
         delete tween;
         tween = nullptr;
     }
     return tween;
+}
+
+
+bool TweenDuino::Timeline::add(TweenDuino::Tween &tween) {
+    return addEntry(tween);
 }
 
 /**
@@ -76,9 +85,10 @@ TweenDuino::Tween* TweenDuino::Timeline::addTo(float& target, float to, unsigned
  * Child tweens will be unaware of any delays or timeline restarts; the 1st tween
  * will always think it's starting at 0 millis, the 2nd exactly at the end of the
  * 1st tween, etc.
+ * 
+ * Managed tweens get their tween deleted during destroy.
  */
-bool TweenDuino::Timeline::add(TweenDuino::Tween &tween) {
-
+bool TweenDuino::Timeline::addEntry(TweenDuino::Tween &tween, bool managed) {
     unsigned long nextStartTime = 0;
     int entryIndex = 0;
     // Maintence Note: Very similar looping logic in TweenDuino::Timeline::update & restart.
@@ -97,6 +107,10 @@ bool TweenDuino::Timeline::add(TweenDuino::Tween &tween) {
     entry.tween = &tween;
     entry.tween->begin(nextStartTime);
     totalDuration += entry.tween->getDuration();
+
+    if (managed) {
+        entry.tlManagedTween = true;
+    }
 
     return true;
 }
