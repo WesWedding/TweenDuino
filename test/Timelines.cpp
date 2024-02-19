@@ -183,11 +183,11 @@ unittest(rejectTooManyTweens)
   bool added = false;
   for (int i = 0; i < maxTweens; i++)
   {
-    added = tl.add(*TweenDuino::Tween::to(val, 100UL, 123.0));
+    added = tl.addTo(val, 123.0, 100UL);
     assertTrue(added);
   }
 
-  added = tl.add(*TweenDuino::Tween::to(val, 100UL, 123.0));
+  added = tl.addTo(val, 123.0, 100UL);
   assertFalse(added);
   
 }

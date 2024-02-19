@@ -62,9 +62,9 @@ unittest(valueStartsAtValExpectedInTimeline) {
   TweenDuino::Timeline tl;
 
   // Slowly ramp up brightness.
-  tl.add(*TweenDuino::Tween::to(brightness, 5000, 1.0));
-  tl.add(*TweenDuino::Tween::to(brightness, 13000, 0.5));
-  tl.add(*TweenDuino::Tween::to(brightness, 5000, 1.0));
+  tl.addTo(brightness, 1.0, 5000);
+  tl.addTo(brightness, 0.5, 13000);
+  tl.addTo(brightness, 1.0, 5000);
 
   tl.update(40);
   assertEqual(brightness, 0.0);
