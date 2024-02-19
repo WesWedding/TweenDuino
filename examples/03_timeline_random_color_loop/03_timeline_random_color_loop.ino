@@ -6,7 +6,9 @@
 #include <TweenDuino.h>
 #include <Adafruit_NeoPixel.h>
 
+// How many LEDs are on the NeoPixel strip?  Change this as appropriate to your setup.
 #define NUM_LEDS 7
+// Which PIN controls the NeoPixel strip?  Change this as appropriate to your setup.
 #define LEDS_PIN 9
 
 // This will be the brightness of our colors.  0.0 = no brightess, 1.0 = full brightness.
