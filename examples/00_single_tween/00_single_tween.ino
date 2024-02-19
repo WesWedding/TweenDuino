@@ -24,7 +24,7 @@ Tween tween(value, duration, finalValue);
 void setup() {
 
     // Use a Sine InOut: https://easings.net/#easeInOutSine
-    tween.setTween(Tween::Ease::SINE, Tween::EaseType::INOUT);
+    tween.setEase(Tween::Ease::SINE, Tween::EaseType::INOUT);
     Serial.print("Values: ");
 }
 

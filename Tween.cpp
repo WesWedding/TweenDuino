@@ -39,13 +39,13 @@ TweenDuino::Tween::~Tween() {
 
 TweenDuino::Tween *TweenDuino::Tween::to(float& target, unsigned long duration, float to) {
   Tween *tween = new Tween(target, duration, to);
-  tween->setTween(LINEAR, INOUT); 
+  tween->setEase(LINEAR, INOUT); 
   return tween;
 }
 
 TweenDuino::Tween *TweenDuino::Tween::to(float& target, unsigned long duration, float to, Ease ease, EaseType type) {
   Tween *tween = new Tween(target, duration, to);
-  tween->setTween(ease, type);
+  tween->setEase(ease, type);
   return tween;
 }
 
@@ -65,7 +65,7 @@ unsigned long TweenDuino::Tween::getStartTime() {
   return startTime;
 }
 
-void TweenDuino::Tween::setTween(Ease e, EaseType type) {
+void TweenDuino::Tween::setEase(Ease e, EaseType type) {
 
   if (ease != nullptr){
     delete ease;
@@ -98,7 +98,7 @@ void TweenDuino::Tween::setTween(Ease e, EaseType type) {
 
 void TweenDuino::Tween::begin(unsigned long timeMs) {
   if (ease == nullptr) {
-    setTween(Ease::LINEAR, EaseType::INOUT);
+    setEase(Ease::LINEAR, EaseType::INOUT);
   }
   startTime = timeMs;
   time = timeMs;
