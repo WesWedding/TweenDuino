@@ -30,6 +30,8 @@ unittest(timelineCompletesOnFinalMS)
   const unsigned long dur3 = 100UL;
   TweenDuino::Tween* tween3Ptr = tl.addTo(val, stop3, dur3);
 
+  assertEqual(dur1 + dur2 + dur3, tl.getDuration());
+
   tl.update(0UL);
   assertEqual(0.0, val);
   assertFalse(tl.isComplete());
