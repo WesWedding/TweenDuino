@@ -1,6 +1,8 @@
 # TweenDuino Animation Library
 Easily transition numeric variables or class members to/from final values gradually over time, using an intuitive API.
 
+Main: ![Build Status (main)](https://github.com/WesWedding/TweenDuino/actions/workflows/arduino_ci.yml/badge.svg?branch=main)
+Dev:  ![Build Status (dev)](https://github.com/WesWedding/TweenDuino/actions/workflows/arduino_ci.yml/badge.svg?branch=dev)
 
 ## Timelines and Tweens
 The fundamental components of this library are two classes: the Timeline and Tween.
