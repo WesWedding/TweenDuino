@@ -121,13 +121,12 @@ void TweenDuino::Timeline::begin(unsigned long timeMs) {
     initialized = true;
 }
 
-void TweenDuino::Timeline::update(unsigned long newTime) {
-    
+void TweenDuino::Timeline::update(unsigned long newTime) {    
     if (!initialized) {
         begin(newTime);
     }
 
-    unsigned long prevTime = totalTime;    
+    unsigned long prevTime = totalTime;
 
     if (newTime >= totalDuration + startTime) {
         totalTime = totalDuration + startTime;
