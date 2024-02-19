@@ -15,17 +15,17 @@ jobs:
           gem install arduino_ci
           arduino_ci.rb --skip-examples-compilation
 # Skipping the examples; errors will throw from Adafruit NeoPixel.  See: https://github.com/WesWedding/TweenDuino/issues/27          
-# runtestExamples:
-#   name: ArduinoCI Example Tests
-#   runs-on: ubuntu-latest
-#   steps:
-#     - uses: actions/checkout@v3
-#     - uses: ruby/setup-ruby@v1
-#       with:
-#         ruby-version: 2.6
-#     - run: |
-#         gem install arduino_ci
-#         arduino_ci.rb --skip-unittests
+  runtestExamples:
+    name: ArduinoCI Example Tests
+    runs-on: ubuntu-latest
+    steps:
+     - uses: actions/checkout@v3
+     - uses: ruby/setup-ruby@v1
+       with:
+         ruby-version: 2.6
+     - run: |
+         gem install arduino_ci
+         arduino_ci.rb --skip-unittests
 
 
 
