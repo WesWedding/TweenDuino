@@ -27,6 +27,7 @@ public:
 
     static Tween *to(float& target, unsigned long duration, float to);
     static Tween *to(float& target, unsigned long duration, float to, Ease ease, EaseType type);
+	void reset(float& newTarget, unsigned long newDuration, float to);
     void setTween(Ease e, EaseType t);
     void begin(unsigned long startTime);
     void update(unsigned long newTime);
