@@ -31,31 +31,31 @@ unittest(timelineCompletesOnFinalMS)
   TweenDuino::Tween* tween3Ptr = tl.addTo(val, stop3, dur3);
 
   tl.update(0UL);
-  assertEqual(val, 0.0);
+  assertEqual(0.0, val);
   assertFalse(tl.isComplete());
   assertFalse(tween1.isComplete());
   assertFalse(tl.isComplete());
 
   tl.update(dur1);
-  assertEqual(val, stop1);
+  assertEqual(stop1, val);
   assertFalse(tl.isComplete());
   assertTrue(tween1.isComplete());
   assertFalse(tl.isComplete());
 
   tl.update(dur1 + dur2);
-  assertEqual(val, stop2);
+  assertEqual(stop2, val);
   assertFalse(tl.isComplete());
   assertTrue(tween2.isComplete());
   assertFalse(tl.isComplete());
 
   tl.update(dur1 + dur2 + dur3);
-  assertEqual(val, stop3);
+  assertEqual(stop3, val);
   assertTrue(tl.isComplete());
   assertTrue(tween3Ptr->isComplete());
 
   // One last check... just for the heck of it.
   tl.update(dur1 + dur2 + dur3 + 1000UL);
-  assertEqual(val, stop3);
+  assertEqual(stop3, val);
   assertTrue(tl.isComplete());
 }
 
@@ -75,7 +75,7 @@ unittest(timelineDurationMatchesTweenDurations)
   tl.add(tween1);
   tl.add(tween2);
 
-  assertEqual(tl.getDuration(), tween1.getDuration() + tween2.getDuration());
+  assertEqual(tween1.getDuration() + tween2.getDuration(), tl.getDuration());
 }
 
 unittest(timelineStartingAfterZeroMillisFinishesWhenExpected)

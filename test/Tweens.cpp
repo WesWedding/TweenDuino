@@ -34,7 +34,7 @@ unittest(decreasingTween)
   const unsigned long endTime = increasing.getStartTime() + increasing.getDuration();
   if (t >= endTime)
   {
-    assertEqual(decreasingFloat, 0.0);
+    assertEqual(0.0, decreasingFloat);
     assertTrue(decreasing.isComplete());
   }
 }
@@ -55,13 +55,13 @@ unittest(finalAndInitialAreSame)
   float val = 4640.0;
   TweenDuino::Tween tween(val, 56734UL, 4640.0);
   tween.update(0UL);
-  assertEqual(val, 4640.0);
+  assertEqual(4640.0, val);
   tween.update(1000UL);
-  assertEqual(val, 4640.0);
+  assertEqual(4640.0, val);
   tween.update(56734UL);
-  assertEqual(val, 4640.0);
+  assertEqual(4640.0, val);
   tween.update(56735UL);
-  assertEqual(val, 4640.0);
+  assertEqual(4640.0, val);
 }
 
 unittest(tweenHitsMaxEvenIfFinalMilliSkipped)
@@ -73,7 +73,7 @@ unittest(tweenHitsMaxEvenIfFinalMilliSkipped)
   tween.update(8600UL);
   // Skip 8732UL.  Perhaps, for instance, a sketch had a delay() in it.
   tween.update(8790UL);
-  assertEqual(val, 9820.34);
+  assertEqualFloat(9820.34, val, 2);
   assertTrue(tween.isComplete());
 }
 
@@ -84,7 +84,7 @@ unittest(tweenWontExceedFinalValueAtEdges)
   tween.update(0UL);
   tween.update(1999UL);
   tween.update(8731UL);
-  assertEqual(val, 9820.34);
+  assertEqualFloat(9820.34, val, 2);
 }
 
 unittest(tweenStartingAfterZeroMillis)
@@ -92,7 +92,7 @@ unittest(tweenStartingAfterZeroMillis)
   float val = 0.0;
   TweenDuino::Tween tween(val, 400UL, 100.0);
   tween.update(100UL);
-  assertEqual(val, 0.0);
+  assertEqual(0.0, val);
   tween.update(300UL);
   assertLess(val, 100.0);
   assertMore(val, 0.0);

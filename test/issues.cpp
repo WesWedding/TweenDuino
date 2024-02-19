@@ -13,9 +13,9 @@ unittest(finalAndInitialAreZero)
   tween.update(0UL);
   tween.update(1000UL);
   tween.update(56734UL);
-  assertEqual(val, 0.0);
+  assertEqual(0.0, val);
   tween.update(56735UL);
-  assertEqual(val, 0.0);
+  assertEqual(0.0, val);
 }
 
 /**
@@ -28,14 +28,14 @@ unittest(valsetToZeroDuringTweenToZero)
   float val = 100.0;
   TweenDuino::Tween tween(val, 56734UL, 0.0);
   tween.update(0UL);
-  assertNotEqual(val, 0.0);
+  assertNotEqual(0.0, val);
   val = 0.0;
   tween.update(1000UL);
-  assertNotEqual(val, 0.0);
+  assertNotEqual(0.0, val);
   tween.update(56734UL);
-  assertEqual(val, 0.0);
+  assertEqual(0.0, val);
   tween.update(56735UL);
-  assertEqual(val, 0.0);
+  assertEqual(0.0, val);
 }
 
 unittest(valStartsAtExpectedVal) {
@@ -67,7 +67,7 @@ unittest(valueStartsAtValExpectedInTimeline) {
   tl.addTo(brightness, 1.0, 5000);
 
   tl.update(40);
-  assertEqual(brightness, 0.0);
+  assertEqual(0.0, brightness);
   tl.update(5002);
   assertMore(brightness, 0.9);
   assertLessOrEqual(brightness, 1.0);
