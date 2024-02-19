@@ -99,7 +99,7 @@ bool TweenDuino::Timeline::addEntry(TweenDuino::Tween &tween, bool managed) {
     }
 
     TweenDuino::Timeline::TimelineEntry &entry = tweens[entryIndex];
-    if (entry.tween != nullptr) {
+    if (entryIndex >= TWEEN_TIMELINE_SIZE) {
         // We didn't have room for the tween.
         return false;
     }
