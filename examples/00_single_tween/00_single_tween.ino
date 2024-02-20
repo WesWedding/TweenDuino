@@ -34,7 +34,7 @@ void loop() {
     const int currentTime = millis();
 
     // Tell the tween that time has progressed via update().  Millis() gives us the current time according to the CPU running.
-    tween.update(millis());
+    tween.update(currentTime);
   
     // Display our results until the tween is done.  Watch this on the Serial Monitor.
     if (tween.isActive()) {

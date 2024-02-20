@@ -24,7 +24,6 @@ Timeline timeline;
 
 // The setup in an Arduino sketch.
 void setup() {
-
     // Add 3 tweens to the timeline.  Notice that each tween is acting on the same "value" variable!
     // Add a Quadratic EaseIn tween.  See: https://easings.net/#easeInQuad
     timeline.addTo(value, firstStop, firstDuration, Tween::Ease::QUAD, Tween::EaseType::IN);

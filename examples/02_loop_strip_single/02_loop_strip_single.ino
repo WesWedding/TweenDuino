@@ -29,13 +29,13 @@ uint32_t color = strip.Color(random(256), random(256), random(256), 0);
 
 void setup() {
     strip.begin();
-    tween.begin(millis());
 
     // Set the strip to show nothing.
     strip.clear();
     strip.show();
 }
 void loop() {
+    // The current time, according to the processor on the board (not necessarily real clock time).
     uint32_t time = millis();
 
     // Tell the tween that time has changed and to adjust its calculations.

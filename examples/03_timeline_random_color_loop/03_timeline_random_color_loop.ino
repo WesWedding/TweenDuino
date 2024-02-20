@@ -40,8 +40,6 @@ void setup() {
     timeline.addTo(brightness, 1.0, 2500);
     timeline.addTo(brightness, 1.0, 1000);
     timeline.addTo(brightness, 0.0, 2500);
-    
-    timeline.begin(millis());
 
     // Set the strip to show nothing.
     strip.clear();
