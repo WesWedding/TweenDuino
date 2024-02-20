@@ -125,4 +125,15 @@ unittest(restartingTweenStartsFromNewVal)
   assertEqual(100.0, val);
 }
 
+unittest(changeEase)
+{
+  float val = 0.0;
+  TweenDuino::Tween tween(val, 400UL, 100.0);
+  tween.setEase(TweenDuino::Tween::Ease::SINE, TweenDuino::Tween::EaseType::INOUT);
+  tween.setEase(TweenDuino::Tween::Ease::QUART, TweenDuino::Tween::EaseType::OUT);
+  tween.update(0UL);
+  tween.update(900UL);
+  assertTrue(tween.isComplete());
+}
+
 unittest_main()
