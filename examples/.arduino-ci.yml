@@ -1,6 +1,14 @@
-# Unfortunately, ArduinoCI triggers an error in Arduino Neo Pixel.h so we can't test the examples automatically.
-# See: https://github.com/WesWedding/TweenDuino/issues/27
 compile:
+  platforms:
+    - uno
+    - due
+    - zero
+    - leonardo
+    - m4
+#    - esp32  See issue: https://github.com/WesWedding/TweenDuino/issues/32
+    - esp8266
+    - mega2560
+    - nano_every
   libraries:
     - Adafruit NeoPixel
   
