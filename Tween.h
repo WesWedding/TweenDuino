@@ -23,6 +23,8 @@ public:
     enum EaseType { IN, OUT, INOUT, NONE };
     
     Tween(float &val, unsigned long duration, float to);
+    Tween(const Tween&) = delete;
+    Tween& operator=(Tween const&) = delete;
     ~Tween();
 
     static Tween *to(float& target, unsigned long duration, float to);

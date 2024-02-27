@@ -14,6 +14,8 @@ namespace TweenDuino {
 class Timeline {
 public:
     Timeline();
+    Timeline(const Timeline&) = delete;
+    Timeline& operator=(Timeline const&) = delete;
 
     void wipe();
 
